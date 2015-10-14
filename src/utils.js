@@ -4,7 +4,10 @@
  */
 class utils {
 	/**
-	 * @param {any} value
+	 * getType
+	 *
+	 * Returns type of given value or name of function/object.
+	 * @param {*} value
 	 * @return {string}
 	 */
 	static getType(value) {
@@ -29,6 +32,9 @@ class utils {
 	}
 
 	/**
+	 * microtime
+	 *
+	 * Returns number of milliseconds since 1 January 1970 00:00:00 UTC.
 	 * @return {float}
 	 */
 	static microtime() {
@@ -36,8 +42,10 @@ class utils {
 	}
 
 	/**
+	 * ucfirst
 	 *
-	 * @param {string }string
+	 * Returns a string with the first character of string capitalized, if that character is alphabetic.
+	 * @param {string} string
 	 * @return {string}
 	 */
 	static ucfirst(string) {
@@ -45,11 +53,18 @@ class utils {
 	}
 
 	/**
-	 * File/directory exists
+	 * fileExists
+	 *
+	 * Checks whether a file or directory exists
+	 * @return {boolean}
 	 */
-	static file_exists(path) {
+	static fileExists(path) {
+		if(!require('path').isAbsolute(path)) {
+			throw new Error("Path must be absolute!");
+		}
 		try {
-			require('fs').accessSync(path, fs.F_OK);
+			let fs = require('fs');
+			fs.accessSync(fs.realpathSync(path), fs.F_OK);
 		} catch (e) {
 			return false;
 		}

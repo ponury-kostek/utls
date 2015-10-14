@@ -1,10 +1,10 @@
 {
   "name": "@ponury/utils",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "Utilities",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/ponury-kostek/utils/issues"
   },
-  "homepage": "https://github.com/ponury-kostek/utils#readme"
+  "homepage": "https://github.com/ponury-kostek/utils#readme",
+  "devDependencies": {
+    "coveralls": "^2.11.4",
+    "istanbul": "^0.3.22",
+    "mocha": "^2.3.3",
+    "mocha-lcov-reporter": "^1.0.0"
+  }
 }
