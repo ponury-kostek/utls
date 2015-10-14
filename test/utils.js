@@ -229,16 +229,16 @@ describe("ucfirst", function () {
 	});
 });
 /**
- * file_exists
+ * fileExists
  */
-describe("file_exists", function () {
+describe("fileExists", function () {
 	it('should return true for ./utils.js', function () {
-		assert.equal(utils.file_exists(__dirname + "/utils.js"), true);
+		assert.equal(utils.fileExists(__dirname + "/utils.js"), true);
 	});
 	it('should return false for ./non_existing_file', function () {
-		assert.equal(utils.file_exists(__dirname + "/non_existing_file"), false);
+		assert.equal(utils.fileExists(__dirname + "/non_existing_file"), false);
 	});
 	it('should return true for ./', function () {
-		assert.equal(utils.file_exists(__dirname + "/"), true);
+		assert.equal(utils.fileExists(__dirname + "/"), true);
 	});
 });

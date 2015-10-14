@@ -53,12 +53,12 @@ class utils {
 	}
 
 	/**
-	 * file_exists
+	 * fileExists
 	 *
 	 * Checks whether a file or directory exists
 	 * @return {boolean}
 	 */
-	static file_exists(path) {
+	static fileExists(path) {
 		if(!require('path').isAbsolute(path)) {
 			throw new Error("Path must be absolute!");
 		}
