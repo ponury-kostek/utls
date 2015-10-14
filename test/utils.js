@@ -215,17 +215,45 @@ describe("getType", function () {
 	});
 });
 /**
- * ucfirst
+ * ucFirst
  */
-describe("ucfirst", function () {
+describe("ucFirst", function () {
 	it('should return Ucfirst for ucfirst', function () {
-		assert.equal(utils.ucfirst("ucfirst"), "Ucfirst");
+		assert.equal(utils.ucFirst("ucfirst"), "Ucfirst");
 	});
 	it('should return Ósemka for ósemka', function () {
-		assert.equal(utils.ucfirst("ósemka"), "Ósemka");
+		assert.equal(utils.ucFirst("ósemka"), "Ósemka");
 	});
 	it('should return 1eet for 1eet', function () {
-		assert.equal(utils.ucfirst("1eet"), "1eet");
+		assert.equal(utils.ucFirst("1eet"), "1eet");
+	});
+});
+/**
+ * lcFirst
+ */
+describe("lcFirst", function () {
+	it('should return lcFirst for LcFirst', function () {
+		assert.equal(utils.lcFirst("LcFirst"), "lcFirst");
+	});
+	it('should return ósemka for Ósemka', function () {
+		assert.equal(utils.lcFirst("Ósemka"), "ósemka");
+	});
+	it('should return 1eet for 1eet', function () {
+		assert.equal(utils.lcFirst("1eet"), "1eet");
+	});
+});
+/**
+ * camelCase
+ */
+describe("camelCase", function () {
+	it('should return CamelCase for camel case', function () {
+		assert.equal(utils.camelCase("camel case"), "camelCase");
+	});
+	it('should return ÓsmaÓsemka for ósma-ósemka', function () {
+		assert.equal(utils.camelCase("ósma-ósemka"), "ósmaÓsemka");
+	});
+	it('should return camelCase for CaMel CaSe', function () {
+		assert.equal(utils.camelCase("CaMel CaSe"), "camelCase");
 	});
 });
 /**
