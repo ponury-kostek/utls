@@ -42,14 +42,38 @@ class utils {
 	}
 
 	/**
-	 * ucfirst
+	 * ucFirst
 	 *
 	 * Returns a string with the first character of string capitalized, if that character is alphabetic.
 	 * @param {string} string
 	 * @return {string}
 	 */
-	static ucfirst(string) {
+	static ucFirst(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+
+	/**
+	 * lcFirst
+	 *
+	 * Returns a string with the first character of string, lowercased if that character is alphabetic.
+	 * @param {string} string
+	 * @return {string}
+	 */
+	static lcFirst(string) {
+		return string.charAt(0).toLowerCase() + string.slice(1);
+	}
+
+	/**
+	 * camelCase
+	 *
+	 * Returns a camel-cased string. Word boundaries are "\b", "-", "_", " "
+	 * @param string
+	 * @returns {string}
+	 */
+	static camelCase(string) {
+		return (string||'').toLowerCase().replace(/(-|\s|_)./g, function(m) {
+			return m.toUpperCase().replace(/-|\s|_/,'');
+		});
 	}
 
 	/**
