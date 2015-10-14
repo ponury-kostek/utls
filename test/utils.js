@@ -161,7 +161,8 @@ describe("getType", function () {
 	 */
 	describe("getType Function", function () {
 		it('should return Function for function() {}', function () {
-			assert.equal(utils.getType(function() {}), "Function");
+			assert.equal(utils.getType(function () {
+			}), "Function");
 
 		});
 		it('should not return Function for true', function () {
@@ -212,6 +213,14 @@ describe("getType", function () {
 				return true;
 			}), "Object");
 		});
+	});
+});
+/**
+ * microtime
+ */
+describe("microtime", function () {
+	it('should return Float', function () {
+		assert.equal(utils.getType(utils.microtime()), "Float");
 	});
 });
 /**
