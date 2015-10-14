@@ -38,7 +38,7 @@ class utils {
 	 * @return {float}
 	 */
 	static microtime() {
-		return (new Data()).getTime() / 1000;
+		return (new Date()).getTime() / 1000;
 	}
 
 	/**
