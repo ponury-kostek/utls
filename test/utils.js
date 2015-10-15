@@ -161,7 +161,8 @@ describe("getType", function () {
 	 */
 	describe("getType Function", function () {
 		it('should return Function for function() {}', function () {
-			assert.equal(utils.getType(function() {}), "Function");
+			assert.equal(utils.getType(function () {
+			}), "Function");
 
 		});
 		it('should not return Function for true', function () {
@@ -212,6 +213,14 @@ describe("getType", function () {
 				return true;
 			}), "Object");
 		});
+	});
+});
+/**
+ * microtime
+ */
+describe("microtime", function () {
+	it('should return Float', function () {
+		assert.equal(utils.getType(utils.microtime()), "Float");
 	});
 });
 /**
@@ -268,5 +277,21 @@ describe("fileExists", function () {
 	});
 	it('should return true for ./', function () {
 		assert.equal(utils.fileExists(__dirname + "/"), true);
+	});
+	it('should throw exception', function () {
+		assert.throws(function () {
+			utils.fileExists("./")
+		}, Error);
+	});
+});
+/**
+ * extend
+ */
+describe("extend", function () {
+	it('should return {foo : "foo", bar : "bar"}', function () {
+		assert.deepEqual(utils.extend({foo : "foo"}, {bar : "bar"}), {foo : "foo", bar : "bar"});
+	});
+	it('should return {foo : "bar", bar : "bar"}', function () {
+		assert.deepEqual(utils.extend({foo : "foo"}, {foo : "bar", bar : "bar"}), {foo : "bar", bar : "bar"});
 	});
 });
