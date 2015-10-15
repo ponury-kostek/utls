@@ -94,5 +94,25 @@ class utils {
 		}
 		return true;
 	}
+
+	/**
+	 * extend
+	 *
+	 * Copy properties from source to destination object
+	 * @param {object} destination
+	 * @param {object} source
+	 * @returns {*}
+	 */
+	static extend(destination, source) {
+		for ( var property in source) {
+			if (source[property] && source[property].constructor && source[property].constructor === Object) {
+				destination[property] = destination[property] || {};
+				extend(destination[property], source[property]);
+			} else {
+				destination[property] = source[property];
+			}
+		}
+		return destination;
+	};
 }
 module.exports = utils;
