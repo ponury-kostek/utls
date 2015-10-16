@@ -294,4 +294,10 @@ describe("extend", function () {
 	it('should return {foo : "bar", bar : "bar"}', function () {
 		assert.deepEqual(utils.extend({foo : "foo"}, {foo : "bar", bar : "bar"}), {foo : "bar", bar : "bar"});
 	});
+	it('should return {foo : "foo", bar : "bar"}', function () {
+		assert.deepEqual(utils.extend({}, {foo : "foo", bar : "bar"}), {foo : "foo", bar : "bar"});
+	});
+	it('should return {foo : "foo", bar : "bar"}', function () {
+		assert.deepEqual(utils.extend({foo : "foo", bar : "bar"}, {}), {foo : "foo", bar : "bar"});
+	});
 });
