@@ -108,8 +108,10 @@ class utils {
 		source = source || {};
 		for (var property in source) {
 			if (source.hasOwnProperty(property) && source[property] && source[property].constructor && source[property].constructor === Object) {
-				destination[property] = destination[property] || {};
-				extend(destination[property], source[property]);
+				if(!(destination[property] && destination[property].constructor && destination[property].constructor === Object)) {
+					destination[property] = {};
+				}
+				this.extend(destination[property], source[property]);
 			} else {
 				destination[property] = source[property];
 			}
