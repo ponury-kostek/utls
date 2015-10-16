@@ -132,6 +132,7 @@ describe("getType", function () {
 		it('should return Array for [], ["array"], new Array(), new Array("array")', function () {
 			assert.equal(utils.getType([]), "Array");
 			assert.equal(utils.getType(["array"]), "Array");
+			//noinspection JSPrimitiveTypeWrapperUsage
 			assert.equal(utils.getType(new Array()), "Array");
 			assert.equal(utils.getType(new Array("array")), "Array");
 		});
@@ -299,5 +300,11 @@ describe("extend", function () {
 	});
 	it('should return {foo : "foo", bar : "bar"}', function () {
 		assert.deepEqual(utils.extend({foo : "foo", bar : "bar"}, {}), {foo : "foo", bar : "bar"});
+	});
+	it('should return {foo : "foo", bar : "bar"}', function () {
+		assert.deepEqual(utils.extend(null, {foo : "foo", bar : "bar"}), {foo : "foo", bar : "bar"});
+	});
+	it('should return {foo : "foo", bar : "bar"}', function () {
+		assert.deepEqual(utils.extend({foo : "foo", bar : "bar"}, null), {foo : "foo", bar : "bar"});
 	});
 });

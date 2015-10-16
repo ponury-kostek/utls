@@ -34,8 +34,8 @@ class utils {
 	/**
 	 * microtime
 	 *
-	 * Returns number of milliseconds since 1 January 1970 00:00:00 UTC.
-	 * @return {float}
+	 * Returns number of seconds since 1 January 1970 00:00:00 UTC.
+	 * @return {number}
 	 */
 	static microtime() {
 		return (new Date()).getTime() / 1000;
@@ -71,8 +71,8 @@ class utils {
 	 * @returns {string}
 	 */
 	static camelCase(string) {
-		return (string||'').toLowerCase().replace(/(-|\s|_)./g, function(m) {
-			return m.toUpperCase().replace(/-|\s|_/,'');
+		return (string || '').toLowerCase().replace(/(-|\s|_)./g, function (m) {
+			return m.toUpperCase().replace(/-|\s|_/, '');
 		});
 	}
 
@@ -83,7 +83,7 @@ class utils {
 	 * @return {boolean}
 	 */
 	static fileExists(path) {
-		if(!require('path').isAbsolute(path)) {
+		if (!require('path').isAbsolute(path)) {
 			throw new Error("Path must be absolute!");
 		}
 		try {
@@ -104,8 +104,10 @@ class utils {
 	 * @returns {*}
 	 */
 	static extend(destination, source) {
-		for ( var property in source) {
-			if (source[property] && source[property].constructor && source[property].constructor === Object) {
+		destination = destination || {};
+		source = source || {};
+		for (var property in source) {
+			if (source.hasOwnProperty(property) && source[property] && source[property].constructor && source[property].constructor === Object) {
 				destination[property] = destination[property] || {};
 				extend(destination[property], source[property]);
 			} else {
@@ -113,6 +115,8 @@ class utils {
 			}
 		}
 		return destination;
-	};
+	}
+
+;
 }
 module.exports = utils;
