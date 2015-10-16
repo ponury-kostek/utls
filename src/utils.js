@@ -111,14 +111,12 @@ class utils {
 				if(!(destination[property] && destination[property].constructor && destination[property].constructor === Object)) {
 					destination[property] = {};
 				}
-				this.extend(destination[property], source[property]);
+				utils.extend(destination[property], source[property]);
 			} else {
 				destination[property] = source[property];
 			}
 		}
 		return destination;
 	}
-
-;
 }
 module.exports = utils;
