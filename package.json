@@ -1,6 +1,6 @@
 {
-  "name": "@ponury/utils",
-  "version": "0.1.9",
+  "name": "utls",
+  "version": "0.2.0",
   "description": "Utilities",
   "main": "index.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ponury-kostek/utils.git"
+    "url": "git+https://github.com/ponury-kostek/utls.git"
   },
   "author": "Michał Żaloudik <ponury.kostek@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ponury-kostek/utils/issues"
+    "url": "https://github.com/ponury-kostek/utls/issues"
   },
-  "homepage": "https://github.com/ponury-kostek/utils#readme",
+  "homepage": "https://github.com/ponury-kostek/utls#readme",
   "devDependencies": {
     "coveralls": "^2.11.4",
     "istanbul": "^0.3.22",

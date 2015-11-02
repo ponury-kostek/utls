@@ -2,7 +2,7 @@
 /**
  *
  */
-class utils {
+class utls {
 	/**
 	 * getType
 	 *
@@ -11,7 +11,7 @@ class utils {
 	 * @return {string}
 	 */
 	static getType(value) {
-		var type = /\[object ([^\]]*)\]/.exec(Object.prototype.toString.call(value))[1];
+		var type = /\[object ([^\]]*)]/.exec(Object.prototype.toString.call(value))[1];
 		switch (type) {
 			case 'Number':
 				if (value % 1 !== 0) {
@@ -111,7 +111,7 @@ class utils {
 				if(!(destination[property] && destination[property].constructor && destination[property].constructor === Object)) {
 					destination[property] = {};
 				}
-				utils.extend(destination[property], source[property]);
+				utls.extend(destination[property], source[property]);
 			} else {
 				destination[property] = source[property];
 			}
@@ -119,4 +119,4 @@ class utils {
 		return destination;
 	}
 }
-module.exports = utils;
+module.exports = utls;

@@ -1,8 +1,8 @@
 # Utilities
-[![Build Status](https://travis-ci.org/ponury-kostek/utils.svg)](https://travis-ci.org/ponury-kostek/utils)
-[![Coverage Status](https://coveralls.io/repos/ponury-kostek/utils/badge.svg?branch=master&service=github)](https://coveralls.io/github/ponury-kostek/utils?branch=master)
-[![npm version](https://badge.fury.io/js/%40ponury%2Futils.svg)](https://badge.fury.io/js/%40ponury%2Futils)
-[![npm](https://img.shields.io/npm/dt/@ponury/utils.svg)](https://www.npmjs.com/package/@ponury/utils)
+[![Build Status](https://travis-ci.org/ponury-kostek/utls.svg)](https://travis-ci.org/ponury-kostek/utls)
+[![Coverage Status](https://coveralls.io/repos/ponury-kostek/utls/badge.svg?branch=master&service=github)](https://coveralls.io/github/ponury-kostek/utls?branch=master)
+[![npm version](https://badge.fury.io/js/%40ponury%2Futls.svg)](https://badge.fury.io/js/%40ponury%2Futls)
+[![npm](https://img.shields.io/npm/dt/utls.svg)](https://www.npmjs.com/package/utls)
 ### getType(value)
 Returns type of given value or name of function/object.
 ### microtime()
