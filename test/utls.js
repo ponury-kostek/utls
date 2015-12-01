@@ -164,7 +164,12 @@ describe("getType", function () {
 		it('should return Function for function() {}', function () {
 			assert.equal(utls.getType(function () {
 			}), "Function");
-
+		});
+		describe("getType named function", function () {
+			it('should return NamedFunction for function NamedFunction() {}', function () {
+				assert.equal(utls.getType(function NamedFunction () {
+				}), "NamedFunction");
+			});
 		});
 		it('should not return Function for true', function () {
 			assert.notEqual(utls.getType(true), "Function");
@@ -192,7 +197,12 @@ describe("getType", function () {
 		it('should return Object for {}, {prop : "value"}', function () {
 			assert.equal(utls.getType({}), "Object");
 			assert.equal(utls.getType({prop : 'value'}), "Object");
-
+		});
+		describe("getType named object", function () {
+			it('should return NamedObject for ', function () {
+				class NamedObject {}
+				assert.equal(utls.getType(new NamedObject()), "NamedObject");
+			});
 		});
 		it('should not return Object for true', function () {
 			assert.notEqual(utls.getType(true), "Object");
