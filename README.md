@@ -16,5 +16,6 @@ Returns a camel-cased string. Word boundaries are "-", "_", " "
 ### fileExists(path)
 Checks whether a file or directory exists
 ```path``` must be absolute path
+### mkdir(path)
 ### extend(destination, source)
 Copy properties from source to destination object

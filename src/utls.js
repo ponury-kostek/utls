@@ -97,6 +97,23 @@ class utls {
 	}
 
 	/**
+	 * mkdir
+	 *
+	 * @param {string} path
+	 */
+	static mkdir(path) {
+		let xpath = require('path');
+		let fs = require('fs');
+		let parts = path.split(xpath.sep);
+		for (let i = 1; i < parts.length; i++) {
+			path = parts.slice(0, i).join(xpath.sep) + "/";
+			if (!utls.fileExists(path)) {
+				fs.mkdirSync(path);
+			}
+		}
+	}
+
+	/**
 	 * extend
 	 *
 	 * Copy properties from source to destination object
