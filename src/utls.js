@@ -7,7 +7,7 @@ class utls {
 	 * getType
 	 *
 	 * Returns type of given value or name of function/object.
-	 * @param {*} value
+	 * @param {any} value
 	 * @return {string}
 	 */
 	static getType(value) {
@@ -68,7 +68,7 @@ class utls {
 	 * camelCase
 	 *
 	 * Returns a camel-cased string. Word boundaries are "\b", "-", "_", " "
-	 * @param string
+	 * @param {string} string
 	 * @returns {string}
 	 */
 	static camelCase(string) {
@@ -100,17 +100,38 @@ class utls {
 	 * mkdir
 	 *
 	 * @param {string} path
+	 * @param {object} options
 	 */
-	static mkdir(path) {
+	static mkdir(path, options) {
+		options.mode = options.mode || 0o775;
+		options.parents = options.parents || true;
 		let xpath = require('path');
 		let fs = require('fs');
 		let parts = path.split(xpath.sep);
-		for (let i = 1; i < parts.length; i++) {
-			path = parts.slice(0, i).join(xpath.sep) + "/";
-			if (!utls.fileExists(path)) {
-				fs.mkdirSync(path);
+		if(options.parents) {
+			for (let i = 1; i < parts.length; i++) {
+				path = parts.slice(0, i).join(xpath.sep) + xpath.sep;
+				if (!utls.fileExists(path)) {
+					fs.mkdirSync(path, options.mode);
+				}
+			}
+		} else {
+			path = parts.splice(0, parts.length - 1).join(xpath.sep) + xpath.sep;
+			if (utls.fileExists(path)) {
+
 			}
 		}
+		return true;
+	}
+
+	/**
+	 * rmdir
+	 *
+	 * @param {string} path
+	 * @param {object} options
+	 */
+	static rmdir(path, options) {
+		return true;
 	}
 
 	/**
