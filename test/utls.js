@@ -168,7 +168,7 @@ describe("getType", () => {
 		});
 		describe("getType named function", () => {
 			it('should return NamedFunction for function NamedFunction() {}', () => {
-				assert.equal(utls.getType(function Named() => {
+				assert.equal(utls.getType(function Named() {
 				}), "NamedFunction");
 			});
 		});
