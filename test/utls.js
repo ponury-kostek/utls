@@ -8,32 +8,32 @@ var utls = require("../index.js");
 /**
  * getType
  */
-describe("getType", function () {
+describe("getType", () => {
 	/**
 	 * getType Boolean
 	 */
-	describe("getType Boolean", function () {
-		it('should return Boolean for true/false', function () {
+	describe("getType Boolean", () => {
+		it('should return Boolean for true/false', () => {
 			assert.equal(utls.getType(true), "Boolean");
 			assert.equal(utls.getType(false), "Boolean");
 		});
-		it('should not return Boolean for 1', function () {
+		it('should not return Boolean for 1', () => {
 			assert.notEqual(utls.getType(1), "Boolean");
 		});
-		it('should not return Boolean for 1.23', function () {
+		it('should not return Boolean for 1.23', () => {
 			assert.notEqual(utls.getType(1.23), "Boolean");
 		});
-		it('should not return Boolean for "true"', function () {
+		it('should not return Boolean for "true"', () => {
 			assert.notEqual(utls.getType("true"), "Boolean");
 		});
-		it('should not return Boolean for ["true"]', function () {
+		it('should not return Boolean for ["true"]', () => {
 			assert.notEqual(utls.getType(['true']), "Boolean");
 		});
-		it('should not return Boolean for {prop : true}', function () {
+		it('should not return Boolean for {prop : true}', () => {
 			assert.notEqual(utls.getType({prop : true}), "Boolean");
 		});
-		it('should not return Boolean for function() { return true }', function () {
-			assert.notEqual(utls.getType(function () {
+		it('should not return Boolean for function() { return true }', () => {
+			assert.notEqual(utls.getType(() => {
 				return true;
 			}), "Boolean");
 		});
@@ -41,29 +41,29 @@ describe("getType", function () {
 	/**
 	 * getType Integer
 	 */
-	describe("getType Integer", function () {
-		it('should return Integer for 0,1,-1', function () {
+	describe("getType Integer", () => {
+		it('should return Integer for 0,1,-1', () => {
 			assert.equal(utls.getType(0), "Integer");
 			assert.equal(utls.getType(1), "Integer");
 			assert.equal(utls.getType(-1), "Integer");
 		});
-		it('should not return Integer for true', function () {
+		it('should not return Integer for true', () => {
 			assert.notEqual(utls.getType(true), "Integer");
 		});
-		it('should not return Integer for 1.23', function () {
+		it('should not return Integer for 1.23', () => {
 			assert.notEqual(utls.getType(1.23), "Integer");
 		});
-		it('should not return Integer for "true"', function () {
+		it('should not return Integer for "true"', () => {
 			assert.notEqual(utls.getType("true"), "Integer");
 		});
-		it('should not return Integer for ["true"]', function () {
+		it('should not return Integer for ["true"]', () => {
 			assert.notEqual(utls.getType(['true']), "Integer");
 		});
-		it('should not return Integer for {prop : true}', function () {
+		it('should not return Integer for {prop : true}', () => {
 			assert.notEqual(utls.getType({prop : true}), "Integer");
 		});
-		it('should not return Integer for function() { return true }', function () {
-			assert.notEqual(utls.getType(function () {
+		it('should not return Integer for function() { return true }', () => {
+			assert.notEqual(utls.getType(() => {
 				return true;
 			}), "Integer");
 		});
@@ -71,28 +71,28 @@ describe("getType", function () {
 	/**
 	 * getType Float
 	 */
-	describe("getType Float", function () {
-		it('should return Float for 1.23, -1.23', function () {
+	describe("getType Float", () => {
+		it('should return Float for 1.23, -1.23', () => {
 			assert.equal(utls.getType(1.23), "Float");
 			assert.equal(utls.getType(-1.23), "Float");
 		});
-		it('should not return Float for true', function () {
+		it('should not return Float for true', () => {
 			assert.notEqual(utls.getType(true), "Float");
 		});
-		it('should not return Float for 1', function () {
+		it('should not return Float for 1', () => {
 			assert.notEqual(utls.getType(1), "Float");
 		});
-		it('should not return Float for "true"', function () {
+		it('should not return Float for "true"', () => {
 			assert.notEqual(utls.getType("true"), "Float");
 		});
-		it('should not return Float for ["true"]', function () {
+		it('should not return Float for ["true"]', () => {
 			assert.notEqual(utls.getType(['true']), "Float");
 		});
-		it('should not return Float for {prop : true}', function () {
+		it('should not return Float for {prop : true}', () => {
 			assert.notEqual(utls.getType({prop : true}), "Float");
 		});
-		it('should not return Float for function() { return true }', function () {
-			assert.notEqual(utls.getType(function () {
+		it('should not return Float for function() { return true }', () => {
+			assert.notEqual(utls.getType(() => {
 				return true;
 			}), "Float");
 		});
@@ -100,28 +100,28 @@ describe("getType", function () {
 	/**
 	 * getType String
 	 */
-	describe("getType String", function () {
-		it('should return String for "", "string"', function () {
+	describe("getType String", () => {
+		it('should return String for "", "string"', () => {
 			assert.equal(utls.getType(""), "String");
 			assert.equal(utls.getType("string"), "String");
 		});
-		it('should not return String for true', function () {
+		it('should not return String for true', () => {
 			assert.notEqual(utls.getType(true), "String");
 		});
-		it('should not return String for 1', function () {
+		it('should not return String for 1', () => {
 			assert.notEqual(utls.getType(1), "String");
 		});
-		it('should not return String for 1.23', function () {
+		it('should not return String for 1.23', () => {
 			assert.notEqual(utls.getType(1.23), "String");
 		});
-		it('should not return String for ["true"]', function () {
+		it('should not return String for ["true"]', () => {
 			assert.notEqual(utls.getType(['true']), "String");
 		});
-		it('should not return String for {prop : true}', function () {
+		it('should not return String for {prop : true}', () => {
 			assert.notEqual(utls.getType({prop : true}), "String");
 		});
-		it('should not return String for function() { return true }', function () {
-			assert.notEqual(utls.getType(function () {
+		it('should not return String for function() { return true }', () => {
+			assert.notEqual(utls.getType(() => {
 				return true;
 			}), "String");
 		});
@@ -129,31 +129,31 @@ describe("getType", function () {
 	/**
 	 * getType Array
 	 */
-	describe("getType Array", function () {
-		it('should return Array for [], ["array"], new Array(), new Array("array")', function () {
+	describe("getType Array", () => {
+		it('should return Array for [], ["array"], new Array(), new Array("array")', () => {
 			assert.equal(utls.getType([]), "Array");
 			assert.equal(utls.getType(["array"]), "Array");
 			//noinspection JSPrimitiveTypeWrapperUsage
 			assert.equal(utls.getType(new Array()), "Array");
 			assert.equal(utls.getType(new Array("array")), "Array");
 		});
-		it('should not return Array for true', function () {
+		it('should not return Array for true', () => {
 			assert.notEqual(utls.getType(true), "Array");
 		});
-		it('should not return Array for 1', function () {
+		it('should not return Array for 1', () => {
 			assert.notEqual(utls.getType(1), "Array");
 		});
-		it('should not return Array for 1.23', function () {
+		it('should not return Array for 1.23', () => {
 			assert.notEqual(utls.getType(1.23), "Array");
 		});
-		it('should not return Array for "true"', function () {
+		it('should not return Array for "true"', () => {
 			assert.notEqual(utls.getType("true"), "Array");
 		});
-		it('should not return Array for {prop : true}', function () {
+		it('should not return Array for {prop : true}', () => {
 			assert.notEqual(utls.getType({prop : true}), "Array");
 		});
-		it('should not return Array for function() { return true }', function () {
-			assert.notEqual(utls.getType(function () {
+		it('should not return Array for function() { return true }', () => {
+			assert.notEqual(utls.getType(() => {
 				return true;
 			}), "Array");
 		});
@@ -161,67 +161,67 @@ describe("getType", function () {
 	/**
 	 * getType Function
 	 */
-	describe("getType Function", function () {
-		it('should return Function for function() {}', function () {
-			assert.equal(utls.getType(function () {
+	describe("getType Function", () => {
+		it('should return Function for function() {}', () => {
+			assert.equal(utls.getType(() => {
 			}), "Function");
 		});
-		describe("getType named function", function () {
-			it('should return NamedFunction for function NamedFunction() {}', function () {
-				assert.equal(utls.getType(function NamedFunction () {
+		describe("getType named function", () => {
+			it('should return NamedFunction for function NamedFunction() {}', () => {
+				assert.equal(utls.getType(function Named() => {
 				}), "NamedFunction");
 			});
 		});
-		it('should not return Function for true', function () {
+		it('should not return Function for true', () => {
 			assert.notEqual(utls.getType(true), "Function");
 		});
-		it('should not return Function for 1', function () {
+		it('should not return Function for 1', () => {
 			assert.notEqual(utls.getType(1), "Function");
 		});
-		it('should not return Function for 1.23', function () {
+		it('should not return Function for 1.23', () => {
 			assert.notEqual(utls.getType(1.23), "Function");
 		});
-		it('should not return Function for "true"', function () {
+		it('should not return Function for "true"', () => {
 			assert.notEqual(utls.getType("true"), "Function");
 		});
-		it('should not return Function for ["true"]', function () {
+		it('should not return Function for ["true"]', () => {
 			assert.notEqual(utls.getType(['true']), "Function");
 		});
-		it('should not return Function for {prop : true}', function () {
+		it('should not return Function for {prop : true}', () => {
 			assert.notEqual(utls.getType({prop : true}), "Function");
 		});
 	});
 	/**
 	 * getType Object
 	 */
-	describe("getType Object", function () {
-		it('should return Object for {}, {prop : "value"}', function () {
+	describe("getType Object", () => {
+		it('should return Object for {}, {prop : "value"}', () => {
 			assert.equal(utls.getType({}), "Object");
 			assert.equal(utls.getType({prop : 'value'}), "Object");
 		});
-		describe("getType named object", function () {
-			it('should return NamedObject for ', function () {
+		describe("getType named object", () => {
+			it('should return NamedObject for ', () => {
 				class NamedObject {}
 				assert.equal(utls.getType(new NamedObject()), "NamedObject");
 			});
 		});
-		it('should not return Object for true', function () {
+		it('should not return Object for true', () => {
 			assert.notEqual(utls.getType(true), "Object");
 		});
-		it('should not return Object for 1', function () {
+		it('should not return Object for 1', () => {
 			assert.notEqual(utls.getType(1), "Object");
 		});
-		it('should not return Object for 1.23', function () {
+		it('should not return Object for 1.23', () => {
 			assert.notEqual(utls.getType(1.23), "Object");
 		});
-		it('should not return Object for "true"', function () {
+		it('should not return Object for "true"', () => {
 			assert.notEqual(utls.getType("true"), "Object");
 		});
-		it('should not return Object for ["true"]', function () {
+		it('should not return Object for ["true"]', () => {
 			assert.notEqual(utls.getType(['true']), "Object");
 		});
-		it('should not return Object for function() { return true }', function () {
-			assert.notEqual(utls.getType(function () {
+		it('should not return Object for function() { return true }', () => {
+			assert.notEqual(utls.getType(() => {
 				return true;
 			}), "Object");
 		});
@@ -230,68 +230,68 @@ describe("getType", function () {
 /**
  * microtime
  */
-describe("microtime", function () {
-	it('should return Float', function () {
+describe("microtime", () => {
+	it('should return Float', () => {
 		assert.equal(utls.getType(utls.microtime()), "Float");
 	});
 });
 /**
  * ucFirst
  */
-describe("ucFirst", function () {
-	it('should return Ucfirst for ucfirst', function () {
+describe("ucFirst", () => {
+	it('should return Ucfirst for ucfirst', () => {
 		assert.equal(utls.ucFirst("ucfirst"), "Ucfirst");
 	});
-	it('should return Ósemka for ósemka', function () {
+	it('should return Ósemka for ósemka', () => {
 		assert.equal(utls.ucFirst("ósemka"), "Ósemka");
 	});
-	it('should return 1eet for 1eet', function () {
+	it('should return 1eet for 1eet', () => {
 		assert.equal(utls.ucFirst("1eet"), "1eet");
 	});
 });
 /**
  * lcFirst
  */
-describe("lcFirst", function () {
-	it('should return lcFirst for LcFirst', function () {
+describe("lcFirst", () => {
+	it('should return lcFirst for LcFirst', () => {
 		assert.equal(utls.lcFirst("LcFirst"), "lcFirst");
 	});
-	it('should return ósemka for Ósemka', function () {
+	it('should return ósemka for Ósemka', () => {
 		assert.equal(utls.lcFirst("Ósemka"), "ósemka");
 	});
-	it('should return 1eet for 1eet', function () {
+	it('should return 1eet for 1eet', () => {
 		assert.equal(utls.lcFirst("1eet"), "1eet");
 	});
 });
 /**
  * camelCase
  */
-describe("camelCase", function () {
-	it('should return CamelCase for camel case', function () {
+describe("camelCase", () => {
+	it('should return CamelCase for camel case', () => {
 		assert.equal(utls.camelCase("camel case"), "camelCase");
 	});
-	it('should return ÓsmaÓsemka for ósma-ósemka', function () {
+	it('should return ÓsmaÓsemka for ósma-ósemka', () => {
 		assert.equal(utls.camelCase("ósma-ósemka"), "ósmaÓsemka");
 	});
-	it('should return camelCase for CaMel CaSe', function () {
+	it('should return camelCase for CaMel CaSe', () => {
 		assert.equal(utls.camelCase("CaMel CaSe"), "camelCase");
 	});
 });
 /**
  * fileExists
  */
-describe("fileExists", function () {
-	it('should return true for ./utls.js', function () {
+describe("fileExists", () => {
+	it('should return true for ./utls.js', () => {
 		assert.equal(utls.fileExists(__dirname + "/utls.js"), true);
 	});
-	it('should return false for ./non_existing_file', function () {
+	it('should return false for ./non_existing_file', () => {
 		assert.equal(utls.fileExists(__dirname + "/non_existing_file"), false);
 	});
-	it('should return true for ./', function () {
+	it('should return true for ./', () => {
 		assert.equal(utls.fileExists(__dirname + "/"), true);
 	});
-	it('should throw exception', function () {
-		assert.throws(function () {
+	it('should throw exception', () => {
+		assert.throws(() => {
 			utls.fileExists("./")
 		}, Error);
 	});
@@ -299,14 +299,14 @@ describe("fileExists", function () {
 /**
  * extend
  */
-describe("extend", function () {
-	it('should return {foo : "foo", bar : "bar"}', function () {
+describe("extend", () => {
+	it('should return {foo : "foo", bar : "bar"}', () => {
 		assert.deepEqual(utls.extend({foo : "foo"}, {bar : "bar"}), {
 			foo : "foo",
 			bar : "bar"
 		});
 	});
-	it('should return {foo : "bar", bar : "bar"}', function () {
+	it('should return {foo : "bar", bar : "bar"}', () => {
 		assert.deepEqual(utls.extend({foo : "foo"}, {
 			foo : "bar",
 			bar : "bar"
@@ -315,7 +315,7 @@ describe("extend", function () {
 			bar : "bar"
 		});
 	});
-	it('should return {foo : "foo", bar : "bar"}', function () {
+	it('should return {foo : "foo", bar : "bar"}', () => {
 		assert.deepEqual(utls.extend({}, {
 			foo : "foo",
 			bar : "bar"
@@ -324,7 +324,7 @@ describe("extend", function () {
 			bar : "bar"
 		});
 	});
-	it('should return {foo : "foo", bar : "bar"}', function () {
+	it('should return {foo : "foo", bar : "bar"}', () => {
 		assert.deepEqual(utls.extend({
 			foo : "foo",
 			bar : "bar"
@@ -333,7 +333,7 @@ describe("extend", function () {
 			bar : "bar"
 		});
 	});
-	it('should return {foo : "foo", bar : "bar"}', function () {
+	it('should return {foo : "foo", bar : "bar"}', () => {
 		assert.deepEqual(utls.extend(null, {
 			foo : "foo",
 			bar : "bar"
@@ -342,7 +342,7 @@ describe("extend", function () {
 			bar : "bar"
 		});
 	});
-	it('should return {foo : "foo", bar : "bar"}', function () {
+	it('should return {foo : "foo", bar : "bar"}', () => {
 		assert.deepEqual(utls.extend({
 			foo : "foo",
 			bar : "bar"
@@ -351,7 +351,7 @@ describe("extend", function () {
 			bar : "bar"
 		});
 	});
-	it('should return {foo : "foo", bar : "bar"}', function () {
+	it('should return {foo : "foo", bar : "bar"}', () => {
 		assert.deepEqual(utls.extend({foo : "foo"}, {
 			"foo" : {"foo" : "bar"},
 			bar : "bar"
@@ -360,7 +360,7 @@ describe("extend", function () {
 			bar : "bar"
 		});
 	});
-	it('should return {foo : "bar", bar : "bar"}', function () {
+	it('should return {foo : "bar", bar : "bar"}', () => {
 		assert.deepEqual(utls.extend({
 			foo : {"foo" : "foo"}
 		}, {
@@ -375,11 +375,11 @@ describe("extend", function () {
 /**
  * mkdir
  */
-describe("mkdir", function () {
+describe("mkdir", () => {
 	after(() => {
 		require('child_process').execFileSync("rm", ["-rf", __dirname + "/a"]);
 	});
-	it('should create path ./a/b/c/', function () {
+	it('should create path ./a/b/c/', () => {
 		utls.mkdir(__dirname + "/a/b/c/");
 		assert.equal(utls.fileExists(__dirname + "/a/b/c/"), true);
 	});
