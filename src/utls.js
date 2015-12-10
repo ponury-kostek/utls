@@ -103,6 +103,7 @@ class utls {
 	 * @param {object} options
 	 */
 	static mkdir(path, options) {
+		options = options || {};
 		options.mode = options.mode || 0o775;
 		options.parents = options.parents || true;
 		let xpath = require('path');
