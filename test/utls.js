@@ -372,3 +372,15 @@ describe("extend", function () {
 		});
 	});
 });
+/**
+ * mkdir
+ */
+describe("mkdir", function () {
+	after(() => {
+		require('child_process').execFileSync("rm", ["-rf", __dirname + "/a"]);
+	});
+	it('should create path ./a/b/c/', function () {
+		utls.mkdir(__dirname + "/a/b/c/");
+		assert.equal(utls.fileExists(__dirname + "/a/b/c/"), true);
+	});
+});
