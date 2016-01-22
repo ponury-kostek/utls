@@ -19,3 +19,4 @@ Checks whether a file or directory exists
 ### mkdir(path)
 ### extend(destination, source)
 Copy properties from source to destination object
+### promisesWaterfall(promises, initial)

@@ -81,6 +81,7 @@ class utls {
 	 * fileExists
 	 *
 	 * Checks whether a file or directory exists
+	 * @throws {Error}
 	 * @return {boolean}
 	 */
 	static fileExists(path) {
@@ -100,9 +101,13 @@ class utls {
 	 * mkdir
 	 *
 	 * @param {string} path
+	 * @throws {Error}
 	 */
 	static mkdir(path) {
 		let xpath = require('path');
+		if (!xpath.isAbsolute(path)) {
+			throw new Error("Path must be absolute");
+		}
 		let fs = require('fs');
 		let parts = path.split(xpath.sep);
 		for (let i = 1; i < parts.length; i++) {
@@ -126,7 +131,7 @@ class utls {
 		source = source || {};
 		for (var property in source) {
 			if (source.hasOwnProperty(property) && source[property] && source[property].constructor && source[property].constructor === Object) {
-				if(!(destination[property] && destination[property].constructor && destination[property].constructor === Object)) {
+				if (!(destination[property] && destination[property].constructor && destination[property].constructor === Object)) {
 					destination[property] = {};
 				}
 				utls.extend(destination[property], source[property]);
@@ -135,6 +140,25 @@ class utls {
 			}
 		}
 		return destination;
+	}
+
+	/**
+	 * promisesWaterfall
+	 *
+	 * @param promises
+	 * @param initial
+	 * @returns {Promise}
+	 */
+	static promisesWaterfall(promises, initial) {
+		if ("Promise" !== utls.getType(initial)) {
+			throw new Error("Initial value must be Promise");
+		}
+		return new Promise((resolve, reject) => {
+			var final = promises.reduce((prevTask, current) => {
+				return prevTask.then(current).catch(reject);
+			}, initial);
+			final.then(resolve).catch(reject);
+		});
 	}
 }
 module.exports = utls;
