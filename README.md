@@ -13,6 +13,8 @@ Returns a string with the first character of ```string``` capitalized, if that c
 Returns a string with the first character of ```string``` lowercased, if that character is alphabetic.
 ### camelCase(string)
 Returns a camel-cased string. Word boundaries are "-", "_", " "
+### pascalCase(string)
+Returns a pascal-cased string. Word boundaries are "-", "_", " "
 ### fileExists(path)
 Checks whether a file or directory exists
 ```path``` must be absolute path

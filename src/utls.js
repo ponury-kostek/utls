@@ -50,7 +50,7 @@ class utls {
 	 * @return {string}
 	 */
 	static ucFirst(string) {
-		return string.charAt(0).toUpperCase() + string.slice(1);
+		return (string || '').charAt(0).toUpperCase() + string.slice(1);
 	}
 
 	/**
@@ -61,7 +61,7 @@ class utls {
 	 * @return {string}
 	 */
 	static lcFirst(string) {
-		return string.charAt(0).toLowerCase() + string.slice(1);
+		return (string || '').charAt(0).toLowerCase() + string.slice(1);
 	}
 
 	/**
@@ -75,6 +75,17 @@ class utls {
 		return (string || '').toLowerCase().replace(/(-|\s|_)./g, function (m) {
 			return m.toUpperCase().replace(/-|\s|_/, '');
 		});
+	}
+
+	/**
+	 * pascalCase
+	 *
+	 * Returns a pascal-cased string. Word boundaries are "\b", "-", "_", " "
+	 * @param string
+	 * @returns {string}
+	 */
+	static pascalCase(string) {
+		return this.ucFirst(this.camelCase(string));
 	}
 
 	/**

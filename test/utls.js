@@ -268,14 +268,28 @@ describe("lcFirst", () => {
  * camelCase
  */
 describe("camelCase", () => {
-	it('should return CamelCase for camel case', () => {
+	it('should return camelCase for camel case', () => {
 		assert.equal(utls.camelCase("camel case"), "camelCase");
 	});
-	it('should return ÓsmaÓsemka for ósma-ósemka', () => {
+	it('should return ósmaÓsemka for ósma-ósemka', () => {
 		assert.equal(utls.camelCase("ósma-ósemka"), "ósmaÓsemka");
 	});
 	it('should return camelCase for CaMel CaSe', () => {
 		assert.equal(utls.camelCase("CaMel CaSe"), "camelCase");
+	});
+});
+/**
+ * pascalCase
+ */
+describe("pascalCase", () => {
+	it('should return CamelCase for pascal case', () => {
+		assert.equal(utls.pascalCase("pascal case"), "PascalCase");
+	});
+	it('should return ÓsmaÓsemka for ósma-ósemka', () => {
+		assert.equal(utls.pascalCase("ósma-ósemka"), "ÓsmaÓsemka");
+	});
+	it('should return PascalCase for pAsCaL CaSe', () => {
+		assert.equal(utls.pascalCase("pAsCaL CaSe"), "PascalCase");
 	});
 });
 /**
