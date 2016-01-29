@@ -171,5 +171,31 @@ class utls {
 			final.then(resolve).catch(reject);
 		});
 	}
+
+	/**
+	 * traverse
+	 *
+	 * @param value
+	 * @param match
+	 * @param callback
+	 * @returns {*}
+	 */
+	static traverse(value, match, callback) {
+		if (match(value)) {
+			return callback(value);
+		} else if (utls.getType(value) == 'Array') {
+			return value.map((val) => {
+				return utls.traverse(val, match, callback);
+			});
+		} else if (utls.getType(value) == 'Object') {
+			var obj = {};
+			Object.getOwnPropertyNames(value).forEach((key) => {
+				obj[key] = utls.traverse(value[key], match, callback);
+			});
+			return obj;
+		} else {
+			return undefined;
+		}
+	}
 }
 module.exports = utls;
