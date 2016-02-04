@@ -185,7 +185,7 @@ class utls {
 			return callback(value);
 		} else if (utls.getType(value) == 'Array') {
 			let arr = [];
-			return value.map((val) => {
+			value.map((val) => {
 				let res = utls.traverse(val, match, callback);
 				if(res !== undefined) {
 					arr.push(res);
