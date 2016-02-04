@@ -23,3 +23,4 @@ Checks whether a file or directory exists
 Copy properties from source to destination object
 ### promisesWaterfall(promises, initial)
 ### traverse(value, match, callback)
+Filters and transforms values

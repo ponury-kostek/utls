@@ -184,17 +184,27 @@ class utls {
 		if (match(value)) {
 			return callback(value);
 		} else if (utls.getType(value) == 'Array') {
+			let arr = [];
 			return value.map((val) => {
-				return utls.traverse(val, match, callback);
+				let res = utls.traverse(val, match, callback);
+				if(res !== undefined) {
+					arr.push(res);
+				}
 			});
+			if(arr.length) {
+				return arr;
+			}
 		} else if (utls.getType(value) == 'Object') {
 			var obj = {};
 			Object.getOwnPropertyNames(value).forEach((key) => {
-				obj[key] = utls.traverse(value[key], match, callback);
+				let res = utls.traverse(value[key], match, callback);
+				if (res !== undefined) {
+					obj[key] = res;
+				}
 			});
-			return obj;
-		} else {
-			return undefined;
+			if (Object.getOwnPropertyNames(obj).length) {
+				return obj;
+			}
 		}
 	}
 }
