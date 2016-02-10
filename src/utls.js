@@ -175,18 +175,20 @@ class utls {
 	/**
 	 * traverse
 	 *
-	 * @param value
-	 * @param match
-	 * @param callback
+	 * @param {*} value
+	 * @param {Function} match
+	 * @param {Function} callback
+	 * @param {String|Number} key
+	 * @param {*} origin
 	 * @returns {*}
 	 */
-	static traverse(value, match, callback) {
+	static traverse(value, match, callback, key, origin) {
 		if (match(value)) {
-			return callback(value);
+			return callback(value, key, origin);
 		} else if (utls.getType(value) == 'Array') {
 			let arr = [];
-			value.map((val) => {
-				let res = utls.traverse(val, match, callback);
+			value.map((val, key, origin) => {
+				let res = utls.traverse(val, match, callback, key, origin);
 				if(res !== undefined) {
 					arr.push(res);
 				}
@@ -197,7 +199,7 @@ class utls {
 		} else if (utls.getType(value) == 'Object') {
 			var obj = {};
 			Object.getOwnPropertyNames(value).forEach((key) => {
-				let res = utls.traverse(value[key], match, callback);
+				let res = utls.traverse(value[key], match, callback, key, value);
 				if (res !== undefined) {
 					obj[key] = res;
 				}
