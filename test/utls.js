@@ -392,8 +392,10 @@ describe("extend", () => {
  */
 describe("mkdir", () => {
 	after(() => {
-		require('child_process').execFileSync("rm", ["-rf",
-			__dirname + "/a"]);
+		require('child_process').execFileSync("rm", [
+			"-rf",
+			__dirname + "/a"
+		]);
 	});
 	it('should create path ./a/b/c/', () => {
 		utls.mkdir(__dirname + "/a/b/c/");
@@ -443,9 +445,11 @@ describe("promisesWaterfall", () => {
 
 	it('should create "abc"', (done) => {
 		var val = '';
-		var promises = [addA,
+		var promises = [
+			addA,
 			addB,
-			addC];
+			addC
+		];
 		utls.promisesWaterfall(promises, Promise.resolve(val)).then((res) => {
 			assert.equal(res, 'abc');
 			done();
@@ -456,11 +460,13 @@ describe("promisesWaterfall", () => {
 	});
 	it('should create "cbbba"', (done) => {
 		var val = '';
-		var promises = [addC,
+		var promises = [
+			addC,
 			addB,
 			addB,
 			addB,
-			addA];
+			addA
+		];
 		utls.promisesWaterfall(promises, Promise.resolve(val)).then((res) => {
 			assert.equal(res, 'cbbba');
 			done();
@@ -471,11 +477,13 @@ describe("promisesWaterfall", () => {
 	});
 	it('should reject with "Crashed"', (done) => {
 		var val = '';
-		var promises = [addC,
+		var promises = [
+			addC,
 			addB,
 			crash,
 			addB,
-			addA];
+			addA
+		];
 		utls.promisesWaterfall(promises, Promise.resolve(val)).then((res) => {
 			assert.equal(res, undefined);
 			done();
@@ -484,12 +492,300 @@ describe("promisesWaterfall", () => {
 			done();
 		});
 	});
-
 	it('should throws "Initial value must be Promise"', () => {
 		var val = '';
 		var promises = [addC];
 		assert.throws(() => {
 			utls.promisesWaterfall(promises, val);
 		}, Error);
+	});
+});
+describe('equals', () => {
+	describe('invalid parameters', () => {
+		it('', () => {
+			assert.equal(utls.equals([
+				1,
+				2
+			], [
+				3,
+				4
+			]), false);
+		});
+		it('', () => {
+			assert.equal(utls.equals({
+				a : 1,
+				b : 2
+			}, {
+				a : 3,
+				b : 4
+			}), false);
+		});
+		it('', () => {
+			assert.equal(utls.equals([
+				1,
+				2,
+				3
+			], [
+				1,
+				2
+			]), false);
+		});
+		it('', () => {
+			assert.equal(utls.equals([
+				1,
+				2
+			], 1), false);
+		});
+		it('', () => {
+			assert.equal(utls.equals([
+				1,
+				2,
+				3,
+				[
+					4,
+					5,
+					6,
+					[
+						7,
+						8,
+						9
+					]
+				]
+			], [
+				1,
+				2,
+				3,
+				[
+					4,
+					5,
+					6,
+					[
+						7,
+						8,
+						0
+					]
+				]
+			]), false);
+		});
+		it('', () => {
+			assert.equal(utls.equals({
+				a : 1,
+				b : 2,
+				c : {
+					d : 3,
+					e : 4,
+					f : {
+						g : 5,
+						h : 6
+					}
+				}
+			}, {
+				a : 1,
+				b : 2,
+				c : {
+					d : 3,
+					e : 4,
+					f : {
+						g : 5,
+						h : 0
+					}
+				}
+			}), false);
+		});
+		it('', () => {
+			assert.equal(utls.equals({
+				a : 1,
+				b : 2,
+				c : [
+					1,
+					2,
+					3,
+					{
+						a : 1,
+						b : 2,
+						c : 'ce'
+					}
+				]
+			}, {
+				a : 1,
+				b : 2,
+				c : [
+					1,
+					2,
+					3,
+					{
+						a : 1,
+						b : 2,
+						c : 'c'
+					}
+				]
+			}), false);
+		});
+		it('', () => {
+			assert.equal(utls.equals([
+				1,
+				2,
+				3,
+				{
+					a : 'a',
+					b : 'b'
+				}
+			], [
+				1,
+				2,
+				3,
+				{
+					a : 'a',
+					c : 'b'
+				}
+			]), false);
+		});
+		it('', () => {
+			assert.equal(utls.equals({
+				a : 'a',
+				b : 'b'
+			}, {a : 'a'}), false);
+		});
+	});
+	describe('valid parameters', () => {
+		it('', () => {
+			assert.equal(utls.equals([
+				1,
+				2
+			], [
+				1,
+				2
+			]), true);
+		});
+		it('', () => {
+			assert.equal(utls.equals({
+				a : 1,
+				b : 2
+			}, {
+				a : 1,
+				b : 2
+			}), true);
+		});
+		it('', () => {
+			var a, b;
+			a = b = [
+				1,
+				2,
+				3
+			];
+			assert.equal(utls.equals(a, b), true);
+		});
+		it('', () => {
+			var a, b;
+			a = b = {
+				a : 1,
+				b : 2
+			};
+			assert.equal(utls.equals(a, b), true);
+		});
+		it('', () => {
+			assert.equal(utls.equals([
+				1,
+				2,
+				3,
+				[
+					4,
+					5,
+					6,
+					[
+						7,
+						8,
+						9
+					]
+				]
+			], [
+				1,
+				2,
+				3,
+				[
+					4,
+					5,
+					6,
+					[
+						7,
+						8,
+						9
+					]
+				]
+			]), true);
+		});
+		it('', () => {
+			assert.equal(utls.equals({
+				a : 1,
+				b : 2,
+				c : {
+					d : 3,
+					e : 4,
+					f : {
+						g : 5,
+						h : 6
+					}
+				}
+			}, {
+				a : 1,
+				b : 2,
+				c : {
+					d : 3,
+					e : 4,
+					f : {
+						g : 5,
+						h : 6
+					}
+				}
+			}), true);
+		});
+		it('', () => {
+			assert.equal(utls.equals([
+				1,
+				2,
+				3,
+				{
+					a : 'a',
+					b : 'b'
+				}
+			], [
+				1,
+				2,
+				3,
+				{
+					a : 'a',
+					b : 'b'
+				}
+			]), true);
+		});
+		it('', () => {
+			assert.equal(utls.equals({
+				a : 1,
+				b : 2,
+				c : [
+					1,
+					2,
+					3,
+					{
+						a : 1,
+						b : 2,
+						c : 'ce'
+					}
+				]
+			}, {
+				a : 1,
+				b : 2,
+				c : [
+					1,
+					2,
+					3,
+					{
+						a : 1,
+						b : 2,
+						c : 'ce'
+					}
+				]
+			}), true);
+		});
 	});
 });
