@@ -189,11 +189,11 @@ class utls {
 			let arr = [];
 			value.map((val, key, origin) => {
 				let res = utls.traverse(val, match, callback, key, origin);
-				if(res !== undefined) {
+				if (res !== undefined) {
 					arr.push(res);
 				}
 			});
-			if(arr.length) {
+			if (arr.length) {
 				return arr;
 			}
 		} else if (utls.getType(value) == 'Object') {
@@ -207,6 +207,83 @@ class utls {
 			if (Object.getOwnPropertyNames(obj).length) {
 				return obj;
 			}
+		}
+	}
+
+	/**
+	 * equals
+	 *
+	 * Checks objects or arrays are equal
+	 *
+	 * @param {Array|Object} first
+	 * @param {Array|Object} second
+	 * @returns {Boolean}
+	 */
+	static equals(first, second) {
+		function arrays(first, second) {
+			if (first === second) {
+				return true;
+			}
+			if (first.length !== second.length) {
+				return false;
+			}
+			var length = first.length;
+			for (var i = 0; i < length; i++) {
+				if (first[i] instanceof Array && second[i] instanceof Array) {
+					if (!arrays(first[i], second[i])) {
+						return false;
+					}
+				} else if (first[i] instanceof Object && second[i] instanceof Object) {
+					if (!objects(first[i], second[i])) {
+						return false;
+					}
+				} else {
+					if (first[i] !== second[i]) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+		function objects(first, second) {
+			if (first === second) {
+				return true;
+			}
+			var firstProps = Object.getOwnPropertyNames(first).sort();
+			var firstPropsLength = firstProps.length;
+			var secondProps = Object.getOwnPropertyNames(second).sort();
+			if (firstPropsLength !== secondProps.length) {
+				return false;
+			}
+			if (!arrays(firstProps, secondProps)) {
+				return false;
+			}
+			for (var i = 0; i < firstPropsLength; i++) {
+				var key = firstProps[i];
+				if (first[key] instanceof Array && second[key] instanceof Array) {
+					if (!arrays(first[key], second[key])) {
+						return false;
+					}
+				} else if (first[key] instanceof Object && second[key] instanceof Object) {
+					if (!objects(first[key], second[key])) {
+						return false;
+					}
+				} else {
+					if (first[key] !== second[key]) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+		if (first instanceof Array && second instanceof Array) {
+			return arrays(first, second);
+		} else if (first instanceof Object && second instanceof Object) {
+			return objects(first, second);
+		} else {
+			return false;
 		}
 	}
 }

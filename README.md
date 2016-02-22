@@ -22,5 +22,7 @@ Checks whether a file or directory exists
 ### extend(destination, source)
 Copy properties from source to destination object
 ### promisesWaterfall(promises, initial)
-### traverse(value, match, callback)
+### traverse(value, match, callback, key, origin)
 Filters and transforms values
+### equals(first, second)
+Checks objects or arrays are equal
