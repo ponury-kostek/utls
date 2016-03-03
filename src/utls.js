@@ -286,5 +286,38 @@ class utls {
 			return false;
 		}
 	}
+
+	/**
+	 * vcopy
+	 *
+	 * Makes copy of value
+	 *
+	 * @param {*} value
+	 * @returns {*}
+	 */
+	static vcopy(value) {
+		var copy;
+		if (typeof value === 'object') {
+			var type = utls.getType(value);
+			if (type === 'Array') {
+				copy = value.map((val) => {
+					return utls.vcopy(val);
+				});
+			} else if (type === 'Object') {
+				copy = {};
+				Object.getOwnPropertyNames(value).forEach((key) => {
+					copy[key] = utls.vcopy(value[key]);
+				});
+			} else if (type === 'Date') {
+				copy = new Date();
+				copy.setTime(value.getTime());
+			} else {
+				copy = value;
+			}
+		} else {
+			copy = value;
+		}
+		return copy;
+	}
 }
 module.exports = utls;

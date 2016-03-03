@@ -443,6 +443,19 @@ describe("promisesWaterfall", () => {
 		});
 	}
 
+	it('should create "a"', (done) => {
+		var val = '';
+		var promises = [
+			addA
+		];
+		utls.promisesWaterfall(promises, Promise.resolve(val)).then((res) => {
+			assert.equal(res, 'a');
+			done();
+		}).catch((res) => {
+			assert.equal(res, undefined);
+			done();
+		});
+	});
 	it('should create "abc"', (done) => {
 		var val = '';
 		var promises = [

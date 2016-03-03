@@ -26,3 +26,4 @@ Copy properties from source to destination object
 Filters and transforms values
 ### equals(first, second)
 Checks objects or arrays are equal
+### vcopy(value)
