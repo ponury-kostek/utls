@@ -1,4 +1,8 @@
+.idea/
+coverage/
+node_modules/
 test/
 .gitignore
 .gitattributes
+.jsdocrc
 .travis.yml

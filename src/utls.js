@@ -1,11 +1,24 @@
+/**
+ * @author Michał Żaloudik <michal.zaloudik@redcart.pl>
+ */
 "use strict";
 /**
- *
+ * @type {{}}
+ * @private
+ */
+var __vcopy_handlers = {};
+/**
+ * @author Michał Żaloudik <michal.zaloudik@redcart.pl>
  */
 class utls {
 	/**
-	 * getType
-	 *
+	 * Throws error if u try to instantiate utls class
+	 * @throws {Error}
+	 */
+	constructor() {
+		throw new Error('Class "utls" cannot be instantiated');
+	}
+	/**
 	 * Returns type of given value or name of function/object.
 	 * @param {*} value
 	 * @return {string}
@@ -33,8 +46,6 @@ class utls {
 	}
 
 	/**
-	 * microtime
-	 *
 	 * Returns number of seconds since 1 January 1970 00:00:00 UTC.
 	 * @return {number}
 	 */
@@ -43,8 +54,6 @@ class utls {
 	}
 
 	/**
-	 * ucFirst
-	 *
 	 * Returns a string with the first character of string capitalized, if that character is alphabetic.
 	 * @param {string} string
 	 * @return {string}
@@ -54,8 +63,6 @@ class utls {
 	}
 
 	/**
-	 * lcFirst
-	 *
 	 * Returns a string with the first character of string, lowercased if that character is alphabetic.
 	 * @param {string} string
 	 * @return {string}
@@ -65,8 +72,6 @@ class utls {
 	}
 
 	/**
-	 * camelCase
-	 *
 	 * Returns a camel-cased string. Word boundaries are "\b", "-", "_", " "
 	 * @param string
 	 * @returns {string}
@@ -78,8 +83,6 @@ class utls {
 	}
 
 	/**
-	 * pascalCase
-	 *
 	 * Returns a pascal-cased string. Word boundaries are "\b", "-", "_", " "
 	 * @param string
 	 * @returns {string}
@@ -89,8 +92,6 @@ class utls {
 	}
 
 	/**
-	 * fileExists
-	 *
 	 * Checks whether a file or directory exists
 	 * @throws {Error}
 	 * @return {boolean}
@@ -109,8 +110,7 @@ class utls {
 	}
 
 	/**
-	 * mkdir
-	 *
+	 * Makes directory
 	 * @param {string} path
 	 * @throws {Error}
 	 */
@@ -130,8 +130,6 @@ class utls {
 	}
 
 	/**
-	 * extend
-	 *
 	 * Copy properties from source to destination object
 	 * @param {object} destination
 	 * @param {object} source
@@ -154,8 +152,6 @@ class utls {
 	}
 
 	/**
-	 * promisesWaterfall
-	 *
 	 * @param promises
 	 * @param initial
 	 * @returns {Promise}
@@ -173,8 +169,6 @@ class utls {
 	}
 
 	/**
-	 * traverse
-	 *
 	 * @param {*} value
 	 * @param {Function} match
 	 * @param {Function} callback
@@ -211,8 +205,6 @@ class utls {
 	}
 
 	/**
-	 * equals
-	 *
 	 * Checks objects or arrays are equal
 	 *
 	 * @param {Array|Object} first
@@ -288,9 +280,7 @@ class utls {
 	}
 
 	/**
-	 * vcopy
-	 *
-	 * Makes copy of value
+	 * Makes copy of value (dereferences object values)
 	 *
 	 * @param {*} value
 	 * @returns {*}
@@ -308,9 +298,8 @@ class utls {
 				Object.getOwnPropertyNames(value).forEach((key) => {
 					copy[key] = utls.vcopy(value[key]);
 				});
-			} else if (type === 'Date') {
-				copy = new Date();
-				copy.setTime(value.getTime());
+			} else if (typeof __vcopy_handlers[type] === 'object') {
+				return __vcopy_handlers[type].handler(__vcopy_handlers[type].cls, value);
 			} else {
 				copy = value;
 			}
@@ -320,4 +309,18 @@ class utls {
 		return copy;
 	}
 }
+/**
+ * Adds type handler
+ * @param {*} cls
+ * @param {Function} handler
+ */
+utls.vcopy.addHandler = function vcopy_addHandler(cls, handler) {
+	__vcopy_handlers[utls.getType(cls)] = {
+		cls : cls,
+		handler : handler
+	};
+};
+utls.vcopy.addHandler(Date, (cls, value) => {
+	return new cls(value.getTime());
+});
 module.exports = utls;

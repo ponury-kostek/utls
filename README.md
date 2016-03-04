@@ -27,3 +27,5 @@ Filters and transforms values
 ### equals(first, second)
 Checks objects or arrays are equal
 ### vcopy(value)
+## Docs
+See [utls github.io pages](http://ponury-kostek.github.io/utls/)

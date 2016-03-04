@@ -513,6 +513,16 @@ describe("promisesWaterfall", () => {
 		}, Error);
 	});
 });
+/**
+ * traverse
+ */
+/*describe("traverse", () => {
+	it('', () => {
+	});
+});*/
+/**
+ * equals
+ */
 describe('equals', () => {
 	describe('invalid parameters', () => {
 		it('', () => {
@@ -799,6 +809,18 @@ describe('equals', () => {
 					}
 				]
 			}), true);
+		});
+	});
+});
+/**
+ * vcopy
+ */
+describe("vcopy", () => {
+
+	var tests = [null, true, false, 1, 0, -1, 1.23, -1.23, [1,2,3,'a', 'b', 'c'], {a : 'a', b : 2, c: [1,'a', [new Date()]]}];
+	tests.forEach((test, id) => {
+		it('#' + (id + 1), () => {
+			assert.deepEqual(test, utls.vcopy(test));
 		});
 	});
 });
