@@ -3,7 +3,7 @@
  */
 "use strict";
 /**
- * @type {{}}
+ * @type {Object}
  * @private
  */
 var __vcopy_handlers = {};
@@ -18,10 +18,11 @@ class utls {
 	constructor() {
 		throw new Error('Class "utls" cannot be instantiated');
 	}
+
 	/**
 	 * Returns type of given value or name of function/object.
 	 * @param {*} value
-	 * @return {string}
+	 * @return {String}
 	 */
 	static getType(value) {
 		var type = /\[object ([^\]]*)]/.exec(Object.prototype.toString.call(value))[1];
@@ -47,7 +48,7 @@ class utls {
 
 	/**
 	 * Returns number of seconds since 1 January 1970 00:00:00 UTC.
-	 * @return {number}
+	 * @return {Number}
 	 */
 	static microtime() {
 		return (new Date()).getTime() / 1000;
@@ -55,8 +56,8 @@ class utls {
 
 	/**
 	 * Returns a string with the first character of string capitalized, if that character is alphabetic.
-	 * @param {string} string
-	 * @return {string}
+	 * @param {String} string
+	 * @return {String}
 	 */
 	static ucFirst(string) {
 		return (string || '').charAt(0).toUpperCase() + string.slice(1);
@@ -64,8 +65,8 @@ class utls {
 
 	/**
 	 * Returns a string with the first character of string, lowercased if that character is alphabetic.
-	 * @param {string} string
-	 * @return {string}
+	 * @param {String} string
+	 * @return {String}
 	 */
 	static lcFirst(string) {
 		return (string || '').charAt(0).toLowerCase() + string.slice(1);
@@ -73,8 +74,8 @@ class utls {
 
 	/**
 	 * Returns a camel-cased string. Word boundaries are "\b", "-", "_", " "
-	 * @param string
-	 * @returns {string}
+	 * @param {String} string
+	 * @returns {String}
 	 */
 	static camelCase(string) {
 		return (string || '').toLowerCase().replace(/(-|\s|_)./g, function (m) {
@@ -84,8 +85,8 @@ class utls {
 
 	/**
 	 * Returns a pascal-cased string. Word boundaries are "\b", "-", "_", " "
-	 * @param string
-	 * @returns {string}
+	 * @param {String} string
+	 * @returns {String}
 	 */
 	static pascalCase(string) {
 		return this.ucFirst(this.camelCase(string));
@@ -94,7 +95,7 @@ class utls {
 	/**
 	 * Checks whether a file or directory exists
 	 * @throws {Error}
-	 * @return {boolean}
+	 * @return {Boolean}
 	 */
 	static fileExists(path) {
 		if (!require('path').isAbsolute(path)) {
@@ -111,28 +112,37 @@ class utls {
 
 	/**
 	 * Makes directory
-	 * @param {string} path
+	 * @param {String} path
+	 * @param {Options} options
 	 * @throws {Error}
 	 */
-	static mkdir(path) {
+	static mkdir(path, options) {
+		options = options || {};
+		options.mode = options.mode || 0o775;
+		options.parents = options.parents || true;
 		let xpath = require('path');
-		if (!xpath.isAbsolute(path)) {
-			throw new Error("Path must be absolute");
-		}
 		let fs = require('fs');
 		let parts = path.split(xpath.sep);
-		for (let i = 1; i < parts.length; i++) {
-			path = parts.slice(0, i).join(xpath.sep) + "/";
-			if (!utls.fileExists(path)) {
-				fs.mkdirSync(path);
+		if(options.parents) {
+			for (let i = 1; i < parts.length; i++) {
+				path = parts.slice(0, i).join(xpath.sep) + xpath.sep;
+				if (!utls.fileExists(path)) {
+					fs.mkdirSync(path, options.mode);
+				}
+			}
+		} else {
+			path = parts.splice(0, parts.length - 1).join(xpath.sep) + xpath.sep;
+			if (utls.fileExists(path)) {
+
 			}
 		}
+		return true;
 	}
 
 	/**
 	 * Copy properties from source to destination object
-	 * @param {object} destination
-	 * @param {object} source
+	 * @param {Object} destination
+	 * @param {Object} source
 	 * @returns {*}
 	 */
 	static extend(destination, source) {
@@ -152,8 +162,8 @@ class utls {
 	}
 
 	/**
-	 * @param promises
-	 * @param initial
+	 * @param {Promise[]} promises
+	 * @param {Promise} initial
 	 * @returns {Promise}
 	 */
 	static promisesWaterfall(promises, initial) {
@@ -307,6 +317,33 @@ class utls {
 			copy = value;
 		}
 		return copy;
+	}
+
+	/**
+	 *
+	 * @param {Array|Object} value
+	 * @returns {*}
+	 */
+	static isCircular(value) {
+		var __ref = [];
+
+		function check(value) {
+			if (typeof value === 'object') {
+				if (__ref.indexOf(value) !== -1) {
+					return true;
+				}
+				__ref.push(value);
+				for (var key in value) {
+					if (value.hasOwnProperty(key) && check(value[key])) {
+						return true;
+					}
+				}
+				__ref.pop();
+			}
+			return false;
+		}
+
+		return check(value);
 	}
 }
 /**
