@@ -307,7 +307,7 @@ class utls {
 				Object.getOwnPropertyNames(value).forEach((key) => {
 					copy[key] = utls.vcopy(value[key]);
 				});
-			} else if (typeof __vcopy_handlers[type] === 'object') {
+			} else if (typeof __vcopy_handlers[type] === 'object' && __vcopy_handlers[type] !== null) {
 				return __vcopy_handlers[type].handler(__vcopy_handlers[type].cls, value);
 			} else {
 				copy = value;
@@ -327,7 +327,7 @@ class utls {
 		var __ref = [];
 
 		function check(value) {
-			if (typeof value === 'object') {
+			if (typeof value === 'object' && value !== null) {
 				if (__ref.indexOf(value) !== -1) {
 					return true;
 				}
@@ -359,7 +359,7 @@ class utls {
 				arr.push(utls.map(val, callback, key, origin));
 			});
 			return arr;
-		} else if (typeof value == 'object') {
+		} else if (typeof value == 'object' && value !== null) {
 			var obj = {};
 			Object.getOwnPropertyNames(value).forEach((key) => {
 				obj[key] = utls.map(value[key], callback, key, value);

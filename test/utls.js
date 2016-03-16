@@ -862,7 +862,7 @@ describe('map', () => {
 				4,
 				5,
 				6
-			]
+			], null, undefined, {}
 		];
 
 		function map(value, key) {
