@@ -816,11 +816,69 @@ describe('equals', () => {
  * vcopy
  */
 describe("vcopy", () => {
-
-	var tests = [null, true, false, 1, 0, -1, 1.23, -1.23, [1,2,3,'a', 'b', 'c'], {a : 'a', b : 2, c: [1,'a', [new Date()]]}];
+	var tests = [
+		null,
+		true,
+		false,
+		1,
+		0,
+		-1,
+		1.23,
+		-1.23,
+		[
+			1,
+			2,
+			3,
+			'a',
+			'b',
+			'c'
+		],
+		{
+			a : 'a',
+			b : 2,
+			c : [
+				1,
+				'a',
+				[new Date()]
+			]
+		}
+	];
 	tests.forEach((test, id) => {
 		it('#' + (id + 1), () => {
 			assert.deepEqual(test, utls.vcopy(test));
 		});
+	});
+});
+describe('map', () => {
+	it('array', () => {
+		var arr = [
+			1,
+			2,
+			3,
+			'a',
+			'b',
+			'c',
+			[
+				4,
+				5,
+				6
+			]
+		];
+
+		function map(value, key) {
+			if (typeof value === 'number') {
+				value *= 2;
+			}
+			return value;
+		}
+
+		function array_map(value, key) {
+			if (utls.getType(value) === 'Array') {
+				return value.map(array_map);
+			}
+			return map(value, key)
+		}
+
+		assert.deepEqual(arr.map(array_map), utls.map(arr, map));
 	});
 });

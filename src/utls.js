@@ -123,7 +123,7 @@ class utls {
 		let xpath = require('path');
 		let fs = require('fs');
 		let parts = path.split(xpath.sep);
-		if(options.parents) {
+		if (options.parents) {
 			for (let i = 1; i < parts.length; i++) {
 				path = parts.slice(0, i).join(xpath.sep) + xpath.sep;
 				if (!utls.fileExists(path)) {
@@ -133,7 +133,6 @@ class utls {
 		} else {
 			path = parts.splice(0, parts.length - 1).join(xpath.sep) + xpath.sep;
 			if (utls.fileExists(path)) {
-
 			}
 		}
 		return true;
@@ -344,6 +343,31 @@ class utls {
 		}
 
 		return check(value);
+	}
+
+	/**
+	 * @param {*} value
+	 * @param {Function} callback
+	 * @param {String|Number} key
+	 * @param {*} origin
+	 * @returns {*}
+	 */
+	static map(value, callback, key, origin) {
+		if (utls.getType(value) == 'Array') {
+			let arr = [];
+			value.map((val, key, origin) => {
+				arr.push(utls.map(val, callback, key, origin));
+			});
+			return arr;
+		} else if (typeof value == 'object') {
+			var obj = {};
+			Object.getOwnPropertyNames(value).forEach((key) => {
+				obj[key] = utls.map(value[key], callback, key, value);
+			});
+			return obj;
+		} else {
+			return callback(value, key, origin);
+		}
 	}
 }
 /**
