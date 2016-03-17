@@ -353,16 +353,47 @@ class utls {
 	 * @returns {*}
 	 */
 	static map(value, callback, key, origin) {
-		if (utls.getType(value) == 'Array') {
+		var type = utls.getType(value);
+		if (type == 'Array') {
 			let arr = [];
 			value.map((val, key, origin) => {
 				arr.push(utls.map(val, callback, key, origin));
 			});
 			return arr;
-		} else if (typeof value == 'object' && value !== null) {
+		} else if (type == 'Object') {
 			var obj = {};
 			Object.getOwnPropertyNames(value).forEach((key) => {
 				obj[key] = utls.map(value[key], callback, key, value);
+			});
+			return obj;
+		} else {
+			return callback(value, key, origin);
+		}
+	}
+
+	/**
+	 * @param {*} value
+	 * @param {Function} callback
+	 * @param {String|Number} key
+	 * @param {*} origin
+	 * @returns {*}
+	 */
+	static filter(value, callback, key, origin) {
+		var type = utls.getType(value);
+		if (type == 'Array') {
+			let arr = [];
+			value.forEach((val, key, origin) => {
+				if (utls.filter(val, callback, key, origin)) {
+					arr.push(val);
+				}
+			});
+			return arr;
+		} else if (type == 'Object') {
+			var obj = {};
+			Object.getOwnPropertyNames(value).forEach((key) => {
+				if (utls.filter(value[key], callback, key, value)) {
+					obj[key] = value[key];
+				}
 			});
 			return obj;
 		} else {

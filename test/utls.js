@@ -5,6 +5,7 @@
  */
 var assert = require("assert");
 var utls = require("../index.js");
+var inspect = require('util').inspect;
 /**
  * getType
  */
@@ -862,7 +863,23 @@ describe('map', () => {
 				4,
 				5,
 				6
-			], null, undefined, {}
+			],
+			null,
+			undefined,
+			[
+				[
+					1,
+					2,
+					3
+				],
+				[
+					[
+						1,
+						2,
+						3
+					]
+				]
+			]
 		];
 
 		function map(value, key) {
@@ -872,13 +889,290 @@ describe('map', () => {
 			return value;
 		}
 
-		function array_map(value, key) {
-			if (utls.getType(value) === 'Array') {
-				return value.map(array_map);
+		assert.deepEqual([
+			2,
+			4,
+			6,
+			'a',
+			'b',
+			'c',
+			[
+				8,
+				10,
+				12
+			],
+			null,
+			undefined,
+			[
+				[
+					2,
+					4,
+					6
+				],
+				[
+					[
+						2,
+						4,
+						6
+					]
+				]
+			]
+		], utls.map(arr, map));
+	});
+	it('object', () => {
+		var obj = {
+			1 : 1,
+			2 : 2,
+			3 : 3,
+			a : 'a',
+			b : 'b',
+			c : 'c',
+			arr : [
+				4,
+				5,
+				6
+			],
+			null : null,
+			undef : undefined,
+			arr2 : [
+				[
+					1,
+					2,
+					3
+				],
+				[
+					[
+						1,
+						2,
+						3
+					]
+				]
+			]
+		};
+
+		function map(value, key) {
+			if (typeof value === 'number') {
+				value *= 2;
 			}
-			return map(value, key)
+			return value;
 		}
 
-		assert.deepEqual(arr.map(array_map), utls.map(arr, map));
+		assert.deepEqual({
+			1 : 2,
+			2 : 4,
+			3 : 6,
+			a : 'a',
+			b : 'b',
+			c : 'c',
+			arr : [
+				8,
+				10,
+				12
+			],
+			null : null,
+			undef : undefined,
+			arr2 : [
+				[
+					2,
+					4,
+					6
+				],
+				[
+					[
+						2,
+						4,
+						6
+					]
+				]
+			]
+		}, utls.map(obj, map));
+	});
+});
+describe('filter', () => {
+	it('array', () => {
+		var arr = [
+			1,
+			2,
+			3,
+			'a',
+			'b',
+			'c',
+			[
+				4,
+				5,
+				6
+			],
+			null,
+			undefined,
+			[
+				[
+					1,
+					2,
+					3
+				],
+				[
+					[
+						1,
+						2,
+						3
+					]
+				]
+			]
+		];
+
+		function filter(value, key) {
+			return typeof value === 'number';
+		}
+
+		function array_filter(value, key) {
+			if (utls.getType(value) === 'Array') {
+				return value.filter(array_filter);
+			}
+			return filter(value, key)
+		}
+
+		assert.deepEqual(arr.filter(array_filter), utls.filter(arr, filter));
+	});
+	it('object', () => {
+		var obj = {
+			1 : 1,
+			2 : 2,
+			3 : 3,
+			a : 'a',
+			b : 'b',
+			c : 'c',
+			arr : [
+				4,
+				5,
+				6
+			],
+			null : null,
+			undef : undefined,
+			arr2 : [
+				[
+					1,
+					2,
+					3
+				],
+				[
+					[
+						1,
+						2,
+						3
+					]
+				]
+			]
+		};
+
+		function filter(value, key) {
+			return typeof value === 'number';
+		}
+
+		function array_filter(value, key) {
+			if (utls.getType(value) === 'Array') {
+				return value.filter(array_filter);
+			}
+			return filter(value, key)
+		}
+
+		assert.deepEqual({
+			'1' : 1,
+			'2' : 2,
+			'3' : 3,
+			arr : [
+				4,
+				5,
+				6
+			],
+			arr2 : [
+				[
+					1,
+					2,
+					3
+				],
+				[
+					[
+						1,
+						2,
+						3
+					]
+				]
+			]
+		}, utls.filter(obj, filter));
+	});
+});
+describe('isCircular', () => {
+	it('circular', () => {
+		var v = [
+			1,
+			2,
+			3,
+			'a',
+			'b',
+			'c',
+			[
+				4,
+				5,
+				6
+			],
+			null,
+			undefined,
+			[
+				[
+					1,
+					2,
+					3
+				],
+				[
+					[
+						1,
+						2,
+						3
+					]
+				]
+			]
+		];
+		v[9][1].push(v);
+		assert.equal(utls.isCircular(v), true);
+	});
+	it('not circular', () => {
+		var n = [
+			1,
+			2,
+			3,
+			'a',
+			'b',
+			'c',
+			[
+				4,
+				5,
+				6
+			],
+			null,
+			undefined,
+			[
+				[
+					1,
+					2,
+					3
+				],
+				[
+					[
+						1,
+						2,
+						3
+					],
+					{a : 'c'}
+				]
+			]
+		];
+		assert.equal(utls.isCircular(n), false);
+	});
+});
+describe('utls', () => {
+	it('constructor', () => {
+		assert.throws(() => {
+			new utls();
+		})
 	});
 });

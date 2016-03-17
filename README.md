@@ -29,5 +29,6 @@ Checks objects or arrays are equal
 ### vcopy(value)
 ### isCircular
 ### map
+### filter
 ## Docs
 See [utls github.io pages](http://ponury-kostek.github.io/utls/)
