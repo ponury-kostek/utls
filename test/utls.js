@@ -672,6 +672,13 @@ describe('equals', () => {
 		});
 	});
 	describe('valid parameters', () => {
+		it('circural', () => {
+			var a = {key : 'value'};
+			a['circular'] = a;
+			var b = {key : 'value'};
+			b['circular'] = b;
+			assert.equal(utls.equals(a, b), true);
+		});
 		it('', () => {
 			assert.equal(utls.equals([
 				1,
@@ -844,6 +851,7 @@ describe("vcopy", () => {
 			]
 		}
 	];
+	tests.push(tests);
 	tests.forEach((test, id) => {
 		it('#' + (id + 1), () => {
 			assert.deepEqual(test, utls.vcopy(test));
