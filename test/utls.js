@@ -672,6 +672,13 @@ describe('equals', () => {
 		});
 	});
 	describe('valid parameters', () => {
+		it('circural', () => {
+			var a = {key : 'value'};
+			a['circular'] = a;
+			var b = {key : 'value'};
+			b['circular'] = b;
+			assert.equal(utls.equals(a, b), true);
+		});
 		it('', () => {
 			assert.equal(utls.equals([
 				1,
@@ -844,6 +851,7 @@ describe("vcopy", () => {
 			]
 		}
 	];
+	tests.push(tests);
 	tests.forEach((test, id) => {
 		it('#' + (id + 1), () => {
 			assert.deepEqual(test, utls.vcopy(test));
@@ -1031,7 +1039,19 @@ describe('filter', () => {
 			return filter(value, key)
 		}
 
+		function filter_by_key(value, key) {
+			return key % 2;
+		}
+
+		function array_filter_by_key(value, key) {
+			if (utls.getType(value) === 'Array') {
+				return value.filter(array_filter_by_key);
+			}
+			return filter_by_key(value, key)
+		}
+
 		assert.deepEqual(arr.filter(array_filter), utls.filter(arr, filter));
+		assert.deepEqual(arr.filter(array_filter_by_key), utls.filter(arr, filter_by_key));
 	});
 	it('object', () => {
 		var obj = {
@@ -1167,6 +1187,18 @@ describe('isCircular', () => {
 			]
 		];
 		assert.equal(utls.isCircular(n), false);
+	});
+	it('not circular', () => {
+		var a = {a : 'a'};
+		var b = {
+			a : a,
+			b : a,
+			c : [
+				a,
+				a
+			]
+		};
+		assert.equal(utls.isCircular(b), false);
 	});
 });
 describe('utls', () => {

@@ -221,6 +221,11 @@ class utls {
 	 * @returns {Boolean}
 	 */
 	static equals(first, second) {
+		var __first_ref_cache = [];
+		var __second_ref_cache = [];
+		var __cmp_cache = [];
+		var fidx, sidx, idx_cmp;
+
 		function arrays(first, second) {
 			if (first === second) {
 				return true;
@@ -230,6 +235,17 @@ class utls {
 			}
 			var length = first.length;
 			for (var i = 0; i < length; i++) {
+				if (typeof first[i] === 'object' && typeof second[i] === 'object') {
+					if (~(fidx = __first_ref_cache.indexOf(first[i])) && ~(sidx = __second_ref_cache.indexOf(second[i]))) {
+						idx_cmp = `${fidx},${sidx}`;
+						if (~__cmp_cache.indexOf(idx_cmp)) {
+							continue;
+						}
+						__cmp_cache.push(idx_cmp);
+					}
+					__first_ref_cache.push(first[i]);
+					__second_ref_cache.push(second[i]);
+				}
 				if (first[i] instanceof Array && second[i] instanceof Array) {
 					if (!arrays(first[i], second[i])) {
 						return false;
@@ -238,10 +254,8 @@ class utls {
 					if (!objects(first[i], second[i])) {
 						return false;
 					}
-				} else {
-					if (first[i] !== second[i]) {
-						return false;
-					}
+				} else if (first[i] !== second[i]) {
+					return false;
 				}
 			}
 			return true;
@@ -254,6 +268,7 @@ class utls {
 			var firstProps = Object.getOwnPropertyNames(first).sort();
 			var firstPropsLength = firstProps.length;
 			var secondProps = Object.getOwnPropertyNames(second).sort();
+			var key;
 			if (firstPropsLength !== secondProps.length) {
 				return false;
 			}
@@ -261,7 +276,18 @@ class utls {
 				return false;
 			}
 			for (var i = 0; i < firstPropsLength; i++) {
-				var key = firstProps[i];
+				key = firstProps[i];
+				if (typeof first[key] === 'object' && typeof second[key] === 'object') {
+					if (~(fidx = __first_ref_cache.indexOf(first[key])) && ~(sidx = __second_ref_cache.indexOf(second[key]))) {
+						idx_cmp = `${fidx},${sidx}`;
+						if (~__cmp_cache.indexOf(idx_cmp)) {
+							continue;
+						}
+						__cmp_cache.push(idx_cmp);
+					}
+					__first_ref_cache.push(first[key]);
+					__second_ref_cache.push(second[key]);
+				}
 				if (first[key] instanceof Array && second[key] instanceof Array) {
 					if (!arrays(first[key], second[key])) {
 						return false;
@@ -270,10 +296,8 @@ class utls {
 					if (!objects(first[key], second[key])) {
 						return false;
 					}
-				} else {
-					if (first[key] !== second[key]) {
-						return false;
-					}
+				} else if (first[key] !== second[key]) {
+					return false;
 				}
 			}
 			return true;
@@ -284,7 +308,7 @@ class utls {
 		} else if (first instanceof Object && second instanceof Object) {
 			return objects(first, second);
 		} else {
-			return false;
+			return first === second;
 		}
 	}
 
@@ -295,27 +319,40 @@ class utls {
 	 * @returns {*}
 	 */
 	static vcopy(value) {
-		var copy;
-		if (typeof value === 'object') {
-			var type = utls.getType(value);
-			if (type === 'Array') {
-				copy = value.map((val) => {
-					return utls.vcopy(val);
-				});
-			} else if (type === 'Object') {
-				copy = {};
-				Object.getOwnPropertyNames(value).forEach((key) => {
-					copy[key] = utls.vcopy(value[key]);
-				});
-			} else if (typeof __vcopy_handlers[type] === 'object' && __vcopy_handlers[type] !== null) {
-				return __vcopy_handlers[type].handler(__vcopy_handlers[type].cls, value);
+		var __ref_cache = [];
+
+		function _cp(value) {
+			var idx;
+			if (typeof value === 'object') {
+				if (~(idx = __ref_cache.indexOf(value))) {
+					return __ref_cache[idx];
+				}
+				__ref_cache.push(value);
+			}
+			var copy;
+			if (typeof value === 'object') {
+				var type = utls.getType(value);
+				if (type === 'Array') {
+					copy = value.map((val) => {
+						return _cp(val);
+					});
+				} else if (type === 'Object') {
+					copy = {};
+					Object.getOwnPropertyNames(value).forEach((key) => {
+						copy[key] = _cp(value[key]);
+					});
+				} else if (typeof __vcopy_handlers[type] === 'object' && __vcopy_handlers[type] !== null) {
+					return __vcopy_handlers[type].handler(__vcopy_handlers[type].cls, value);
+				} else {
+					copy = value;
+				}
 			} else {
 				copy = value;
 			}
-		} else {
-			copy = value;
+			return copy;
 		}
-		return copy;
+
+		return _cp(value);
 	}
 
 	/**
@@ -328,7 +365,7 @@ class utls {
 
 		function check(value) {
 			if (typeof value === 'object' && value !== null) {
-				if (__ref.indexOf(value) !== -1) {
+				if (~__ref.indexOf(value)) {
 					return true;
 				}
 				__ref.push(value);
@@ -353,22 +390,49 @@ class utls {
 	 * @returns {*}
 	 */
 	static map(value, callback, key, origin) {
-		var type = utls.getType(value);
-		if (type == 'Array') {
-			let arr = [];
-			value.map((val, key, origin) => {
-				arr.push(utls.map(val, callback, key, origin));
-			});
-			return arr;
-		} else if (type == 'Object') {
-			var obj = {};
-			Object.getOwnPropertyNames(value).forEach((key) => {
-				obj[key] = utls.map(value[key], callback, key, value);
-			});
-			return obj;
-		} else {
-			return callback(value, key, origin);
+		var __ref_cache = [];
+
+		function map(value, callback, key, origin) {
+			var idx;
+			var type = utls.getType(value);
+			if (type == 'Array') {
+				let arr = [];
+				value.map((val, key, origin) => {
+					if (typeof val === 'object' && ~(idx = __ref_cache.indexOf(val))) {
+						arr.push(val);
+					} else {
+						if (typeof val === 'object') {
+							__ref_cache.push(val);
+						}
+						arr.push(map(val, callback, key, origin));
+						if (typeof val === 'object') {
+							__ref_cache.pop();
+						}
+					}
+				});
+				return arr;
+			} else if (type == 'Object') {
+				var obj = {};
+				Object.getOwnPropertyNames(value).forEach((key) => {
+					if (typeof value[key] === 'object' && ~(idx = __ref_cache.indexOf(value[key]))) {
+						obj[key] = value[key];
+					} else {
+						if (typeof value[key] === 'object') {
+							__ref_cache.push(value[key]);
+						}
+						obj[key] = map(value[key], callback, key, value);
+						if (typeof value[key] === 'object') {
+							__ref_cache.pop();
+						}
+					}
+				});
+				return obj;
+			} else {
+				return callback(value, key, origin);
+			}
 		}
+
+		return map(value, callback, key, origin);
 	}
 
 	/**
@@ -379,26 +443,51 @@ class utls {
 	 * @returns {*}
 	 */
 	static filter(value, callback, key, origin) {
-		var type = utls.getType(value);
-		if (type == 'Array') {
-			let arr = [];
-			value.forEach((val, key, origin) => {
-				if (utls.filter(val, callback, key, origin)) {
-					arr.push(val);
-				}
-			});
-			return arr;
-		} else if (type == 'Object') {
-			var obj = {};
-			Object.getOwnPropertyNames(value).forEach((key) => {
-				if (utls.filter(value[key], callback, key, value)) {
-					obj[key] = value[key];
-				}
-			});
-			return obj;
-		} else {
-			return callback(value, key, origin);
+		var __ref_cache = [];
+
+		function filter(value, callback, key, origin) {
+			var type = utls.getType(value);
+			var idx;
+			if (type == 'Array') {
+				let arr = [];
+				value.forEach((val, key, origin) => {
+					if (typeof val === 'object' && ~(idx = __ref_cache.indexOf(val))) {
+						return;
+					}
+					if (typeof val === 'object') {
+						__ref_cache.push(val);
+					}
+					if (utls.filter(val, callback, key, origin)) {
+						arr.push(val);
+					}
+					if (typeof val === 'object') {
+						__ref_cache.pop();
+					}
+				});
+				return arr;
+			} else if (type == 'Object') {
+				var obj = {};
+				Object.getOwnPropertyNames(value).forEach((key) => {
+					if (typeof value[key] === 'object' && ~(idx = __ref_cache.indexOf(value[key]))) {
+						return;
+					}
+					if (typeof value[key] === 'object') {
+						__ref_cache.push(value[key]);
+					}
+					if (utls.filter(value[key], callback, key, value)) {
+						obj[key] = value[key];
+					}
+					if (typeof value[key] === 'object') {
+						__ref_cache.pop();
+					}
+				});
+				return obj;
+			} else {
+				return callback(value, key, origin);
+			}
 		}
+
+		return filter(value, callback, key, origin);
 	}
 }
 /**
