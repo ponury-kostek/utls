@@ -38,7 +38,7 @@ class utls {
 				type = value.name.length ? value.name : type;
 				break;
 			case 'Object':
-				type = value.constructor.name.length ? value.constructor.name : type;
+				type = value.constructor && value.constructor.name.length ? value.constructor.name : type;
 				break;
 			default:
 				break;
