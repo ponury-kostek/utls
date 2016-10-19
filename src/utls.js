@@ -26,6 +26,7 @@ class utls {
 	 */
 	static getType(value) {
 		var type = /\[object ([^\]]*)]/.exec(Object.prototype.toString.call(value))[1];
+		var name = '';
 		switch (type) {
 			case 'Number':
 				if (value % 1 !== 0) {
@@ -35,10 +36,12 @@ class utls {
 				}
 				break;
 			case 'Function':
-				type = value.name.length ? value.name : type;
+				name = (/(function|class) ([a-zA-Z_][a-zA-Z0-9_]*)/.exec(Function.prototype.toString.call(value)) || []).pop();
+				type = typeof name == 'string' && name.length ? name : type;
 				break;
 			case 'Object':
-				type = value.constructor && value.constructor.name.length ? value.constructor.name : type;
+				name = utls.getType(value.constructor);
+				type = name !== 'Function' ? name : type;
 				break;
 			default:
 				break;
@@ -201,7 +204,7 @@ class utls {
 			}
 		} else if (utls.getType(value) == 'Object') {
 			var obj = {};
-			for(var k in value){
+			for (var k in value) {
 				var res = utls.traverse(value[k], match, callback, k, value);
 				if (res !== undefined) {
 					obj[k] = res;
@@ -338,7 +341,7 @@ class utls {
 					});
 				} else if (type === 'Object') {
 					copy = {};
-					for(var k in value){
+					for (var k in value) {
 						copy[k] = _cp(value[k]);
 					}
 				} else if (typeof __vcopy_handlers[type] === 'object' && __vcopy_handlers[type] !== null) {
@@ -413,7 +416,7 @@ class utls {
 				return arr;
 			} else if (type == 'Object') {
 				var obj = {};
-				for(var k in value){
+				for (var k in value) {
 					if (typeof value[k] === 'object' && ~(idx = __ref_cache.indexOf(value[k]))) {
 						obj[k] = value[k];
 					} else {
@@ -467,7 +470,7 @@ class utls {
 				return arr;
 			} else if (type == 'Object') {
 				var obj = {};
-				for(var k in value){
+				for (var k in value) {
 					if (typeof value[k] === 'object' && ~(idx = __ref_cache.indexOf(value[k]))) {
 						return;
 					}
