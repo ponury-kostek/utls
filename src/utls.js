@@ -102,7 +102,7 @@ class utls {
 			throw new Error("Path must be absolute!");
 		}
 		try {
-			let fs = require('fs');
+			var fs = require('fs');
 			fs.accessSync(fs.realpathSync(path), fs.F_OK);
 		} catch (e) {
 			return false;
@@ -120,11 +120,11 @@ class utls {
 		options = options || {};
 		options.mode = options.mode || 0o775;
 		options.parents = options.parents || true;
-		let xpath = require('path');
-		let fs = require('fs');
-		let parts = path.split(xpath.sep);
+		var xpath = require('path');
+		var fs = require('fs');
+		var parts = path.split(xpath.sep);
 		if (options.parents) {
-			for (let i = 1; i < parts.length; i++) {
+			for (var i = 1; i < parts.length; i++) {
 				path = parts.slice(0, i).join(xpath.sep) + xpath.sep;
 				if (!utls.fileExists(path)) {
 					fs.mkdirSync(path, options.mode);
@@ -189,9 +189,9 @@ class utls {
 		if (match(value)) {
 			return callback(value, key, origin);
 		} else if (utls.getType(value) == 'Array') {
-			let arr = [];
+			var arr = [];
 			value.map((val, key, origin) => {
-				let res = utls.traverse(val, match, callback, key, origin);
+				var res = utls.traverse(val, match, callback, key, origin);
 				if (res !== undefined) {
 					arr.push(res);
 				}
@@ -201,12 +201,12 @@ class utls {
 			}
 		} else if (utls.getType(value) == 'Object') {
 			var obj = {};
-			Object.getOwnPropertyNames(value).forEach((key) => {
-				let res = utls.traverse(value[key], match, callback, key, value);
+			for(var k in value){
+				var res = utls.traverse(value[k], match, callback, k, value);
 				if (res !== undefined) {
-					obj[key] = res;
+					obj[k] = res;
 				}
-			});
+			}
 			if (Object.getOwnPropertyNames(obj).length) {
 				return obj;
 			}
@@ -237,7 +237,7 @@ class utls {
 			for (var i = 0; i < length; i++) {
 				if (typeof first[i] === 'object' && typeof second[i] === 'object') {
 					if (~(fidx = __first_ref_cache.indexOf(first[i])) && ~(sidx = __second_ref_cache.indexOf(second[i]))) {
-						idx_cmp = `${fidx},${sidx}`;
+						idx_cmp = fidx + ',' + sidx;
 						if (~__cmp_cache.indexOf(idx_cmp)) {
 							continue;
 						}
@@ -279,7 +279,7 @@ class utls {
 				key = firstProps[i];
 				if (typeof first[key] === 'object' && typeof second[key] === 'object') {
 					if (~(fidx = __first_ref_cache.indexOf(first[key])) && ~(sidx = __second_ref_cache.indexOf(second[key]))) {
-						idx_cmp = `${fidx},${sidx}`;
+						idx_cmp = fidx + ',' + sidx;
 						if (~__cmp_cache.indexOf(idx_cmp)) {
 							continue;
 						}
@@ -338,9 +338,9 @@ class utls {
 					});
 				} else if (type === 'Object') {
 					copy = {};
-					Object.getOwnPropertyNames(value).forEach((key) => {
-						copy[key] = _cp(value[key]);
-					});
+					for(var k in value){
+						copy[k] = _cp(value[k]);
+					}
 				} else if (typeof __vcopy_handlers[type] === 'object' && __vcopy_handlers[type] !== null) {
 					return __vcopy_handlers[type].handler(__vcopy_handlers[type].cls, value);
 				} else {
@@ -369,8 +369,8 @@ class utls {
 					return true;
 				}
 				__ref.push(value);
-				for (var key in value) {
-					if (value.hasOwnProperty(key) && check(value[key])) {
+				for (var k in value) {
+					if (check(value[k])) {
 						return true;
 					}
 				}
@@ -396,7 +396,7 @@ class utls {
 			var idx;
 			var type = utls.getType(value);
 			if (type == 'Array') {
-				let arr = [];
+				var arr = [];
 				value.map((val, key, origin) => {
 					if (typeof val === 'object' && ~(idx = __ref_cache.indexOf(val))) {
 						arr.push(val);
@@ -413,19 +413,19 @@ class utls {
 				return arr;
 			} else if (type == 'Object') {
 				var obj = {};
-				Object.getOwnPropertyNames(value).forEach((key) => {
-					if (typeof value[key] === 'object' && ~(idx = __ref_cache.indexOf(value[key]))) {
-						obj[key] = value[key];
+				for(var k in value){
+					if (typeof value[k] === 'object' && ~(idx = __ref_cache.indexOf(value[k]))) {
+						obj[k] = value[k];
 					} else {
-						if (typeof value[key] === 'object') {
-							__ref_cache.push(value[key]);
+						if (typeof value[k] === 'object') {
+							__ref_cache.push(value[k]);
 						}
-						obj[key] = map(value[key], callback, key, value);
-						if (typeof value[key] === 'object') {
+						obj[k] = map(value[k], callback, k, value);
+						if (typeof value[k] === 'object') {
 							__ref_cache.pop();
 						}
 					}
-				});
+				}
 				return obj;
 			} else {
 				return callback(value, key, origin);
@@ -449,7 +449,7 @@ class utls {
 			var type = utls.getType(value);
 			var idx;
 			if (type == 'Array') {
-				let arr = [];
+				var arr = [];
 				value.forEach((val, key, origin) => {
 					if (typeof val === 'object' && ~(idx = __ref_cache.indexOf(val))) {
 						return;
@@ -467,20 +467,20 @@ class utls {
 				return arr;
 			} else if (type == 'Object') {
 				var obj = {};
-				Object.getOwnPropertyNames(value).forEach((key) => {
-					if (typeof value[key] === 'object' && ~(idx = __ref_cache.indexOf(value[key]))) {
+				for(var k in value){
+					if (typeof value[k] === 'object' && ~(idx = __ref_cache.indexOf(value[k]))) {
 						return;
 					}
-					if (typeof value[key] === 'object') {
-						__ref_cache.push(value[key]);
+					if (typeof value[k] === 'object') {
+						__ref_cache.push(value[k]);
 					}
-					if (utls.filter(value[key], callback, key, value)) {
-						obj[key] = value[key];
+					if (utls.filter(value[k], callback, k, value)) {
+						obj[k] = value[k];
 					}
-					if (typeof value[key] === 'object') {
+					if (typeof value[k] === 'object') {
 						__ref_cache.pop();
 					}
-				});
+				}
 				return obj;
 			} else {
 				return callback(value, key, origin);
