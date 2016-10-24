@@ -199,9 +199,7 @@ class utls {
 					arr.push(res);
 				}
 			});
-			if (arr.length) {
-				return arr;
-			}
+			return arr;
 		} else if (utls.getType(value) == 'Object') {
 			var obj = {};
 			for (var k in value) {
@@ -210,9 +208,7 @@ class utls {
 					obj[k] = res;
 				}
 			}
-			if (Object.getOwnPropertyNames(obj).length) {
-				return obj;
-			}
+			return obj;
 		}
 	}
 
