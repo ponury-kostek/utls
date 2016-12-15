@@ -488,6 +488,15 @@ class utls {
 
 		return filter(value, callback, key, origin);
 	}
+
+	static pext(o, m) {
+		const e = {};
+		const l = m.length;
+		for (var i = 0; i < l; i++) {
+			e[m[i]] = o[m[i]];
+		}
+		return e;
+	}
 }
 /**
  * Adds type handler
