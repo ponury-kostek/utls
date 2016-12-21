@@ -1,6 +1,6 @@
 {
   "name": "utls",
-  "version": "0.2.19",
+  "version": "1.0.0",
   "description": "Utilities",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ponury-kostek/utls#readme",
   "devDependencies": {
+    "benchmark": "^2.1.2",
     "coveralls": "^2.11.8",
     "ink-docstrap": "^1.1.4",
     "istanbul": "^0.3.22",
