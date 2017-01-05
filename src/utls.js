@@ -25,28 +25,40 @@ class utls {
 	 * @return {String}
 	 */
 	static getType(value) {
-		var type = /\[object ([^\]]*)]/.exec(Object.prototype.toString.call(value))[1];
-		var name = '';
-		switch (type) {
-			case 'Number':
+		if (value === null) {
+			return 'Null';
+		}
+		if (value === undefined) {
+			return 'Undefined';
+		}
+		if (value === true || value === false) {
+			return 'Boolean';
+		}
+		function _function(value) {
+			return value.name;
+		}
+
+		switch (typeof value) {
+			case 'number':
 				if (value % 1 !== 0) {
-					type = 'Float';
+					return 'Float';
 				} else {
-					type = 'Integer';
+					return 'Integer';
 				}
 				break;
-			case 'Function':
-				name = (/(function|class) ([a-zA-Z_][a-zA-Z0-9_]*)/.exec(Function.prototype.toString.call(value)) || []).pop();
-				type = typeof name == 'string' && name.length ? name : type;
+			case 'string':
+				return 'String';
 				break;
-			case 'Object':
-				name = utls.getType(value.constructor);
-				type = name !== 'Function' ? name : type;
+			case 'function':
+				return _function(value) || 'Function';
+				break;
+			case 'object':
+				return _function(value.constructor) || 'Object';
 				break;
 			default:
+				return 'unknown';
 				break;
 		}
-		return type;
 	}
 
 	/**
