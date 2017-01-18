@@ -39,6 +39,9 @@ describe("getType", () => {
 			}), "Boolean");
 		});
 	});
+	it('should return NaN for NaN', () => {
+		assert.equal(utls.getType(NaN), "NaN");
+	});
 	/**
 	 * getType Integer
 	 */
@@ -199,6 +202,7 @@ describe("getType", () => {
 		it('should return Object for {}, {prop : "value"}', () => {
 			assert.equal(utls.getType({}), "Object");
 			assert.equal(utls.getType({prop : 'value'}), "Object");
+			assert.equal(utls.getType(Object.create(null)), "Object");
 		});
 		describe("getType named object", () => {
 			it('should return NamedObject for ', () => {

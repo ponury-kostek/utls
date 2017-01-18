@@ -34,6 +34,9 @@ class utls {
 		if (value === true || value === false) {
 			return 'Boolean';
 		}
+		if (value !== value) {
+			return 'NaN';
+		}
 		function _function(value) {
 			return value.name;
 		}
@@ -53,6 +56,9 @@ class utls {
 				return _function(value) || 'Function';
 				break;
 			case 'object':
+				if (value.constructor === undefined) { // handles Object.create(null)
+					return 'Object';
+				}
 				return _function(value.constructor) || 'Object';
 				break;
 			default:
