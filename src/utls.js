@@ -6,7 +6,7 @@
  * @type {Object}
  * @private
  */
-var __vcopy_handlers = {};
+const __vcopy_handlers = {};
 /**
  * @author Michał Żaloudik <michal.zaloudik@redcart.pl>
  */
@@ -45,25 +45,19 @@ class utls {
 			case 'number':
 				if (value % 1 !== 0) {
 					return 'Float';
-				} else {
-					return 'Integer';
 				}
-				break;
+				return 'Integer';
 			case 'string':
 				return 'String';
-				break;
 			case 'function':
 				return _function(value) || 'Function';
-				break;
 			case 'object':
 				if (value.constructor === undefined) { // handles Object.create(null)
 					return 'Object';
 				}
 				return _function(value.constructor) || 'Object';
-				break;
 			default:
 				return 'unknown';
-				break;
 		}
 	}
 
@@ -123,7 +117,7 @@ class utls {
 			throw new Error("Path must be absolute!");
 		}
 		try {
-			var fs = require('fs');
+			const fs = require('fs');
 			fs.accessSync(fs.realpathSync(path), fs.F_OK);
 		} catch (e) {
 			return false;
@@ -141,9 +135,9 @@ class utls {
 		options = options || {};
 		options.mode = options.mode || 0o775;
 		options.parents = options.parents || true;
-		var xpath = require('path');
-		var fs = require('fs');
-		var parts = path.split(xpath.sep);
+		const xpath = require('path');
+		const fs = require('fs');
+		const parts = path.split(xpath.sep);
 		if (options.parents) {
 			for (var i = 1; i < parts.length; i++) {
 				path = parts.slice(0, i).join(xpath.sep) + xpath.sep;
@@ -168,7 +162,7 @@ class utls {
 	static extend(destination, source) {
 		destination = destination || {};
 		source = source || {};
-		for (var property in source) {
+		for (const property in source) {
 			if (source.hasOwnProperty(property) && source[property] && source[property].constructor && source[property].constructor === Object) {
 				if (!(destination[property] && destination[property].constructor && destination[property].constructor === Object)) {
 					destination[property] = {};
@@ -191,7 +185,7 @@ class utls {
 			throw new Error("Initial value must be Promise");
 		}
 		return new Promise((resolve, reject) => {
-			var final = promises.reduce((prevTask, current) => {
+			const final = promises.reduce((prevTask, current) => {
 				return prevTask.then(current).catch(reject);
 			}, initial);
 			final.then(resolve).catch(reject);
@@ -210,18 +204,18 @@ class utls {
 		if (match(value)) {
 			return callback(value, key, origin);
 		} else if (utls.getType(value) == 'Array') {
-			var arr = [];
+			const arr = [];
 			value.map((val, key, origin) => {
-				var res = utls.traverse(val, match, callback, key, origin);
+				const res = utls.traverse(val, match, callback, key, origin);
 				if (res !== undefined) {
 					arr.push(res);
 				}
 			});
 			return arr;
 		} else if (utls.getType(value) == 'Object') {
-			var obj = {};
-			for (var k in value) {
-				var res = utls.traverse(value[k], match, callback, k, value);
+			const obj = {};
+			for (const k in value) {
+				const res = utls.traverse(value[k], match, callback, k, value);
 				if (res !== undefined) {
 					obj[k] = res;
 				}
@@ -238,10 +232,10 @@ class utls {
 	 * @returns {Boolean}
 	 */
 	static equals(first, second) {
-		var __first_ref_cache = [];
-		var __second_ref_cache = [];
-		var __cmp_cache = [];
-		var fidx, sidx, idx_cmp;
+		const __first_ref_cache = [];
+		const __second_ref_cache = [];
+		const __cmp_cache = [];
+		let fidx, sidx, idx_cmp;
 
 		function arrays(first, second) {
 			if (first === second) {
@@ -250,7 +244,7 @@ class utls {
 			if (first.length !== second.length) {
 				return false;
 			}
-			var length = first.length;
+			const length = first.length;
 			for (var i = 0; i < length; i++) {
 				if (typeof first[i] === 'object' && typeof second[i] === 'object') {
 					if (~(fidx = __first_ref_cache.indexOf(first[i])) && ~(sidx = __second_ref_cache.indexOf(second[i]))) {
@@ -282,10 +276,10 @@ class utls {
 			if (first === second) {
 				return true;
 			}
-			var firstProps = Object.getOwnPropertyNames(first).sort();
-			var firstPropsLength = firstProps.length;
-			var secondProps = Object.getOwnPropertyNames(second).sort();
-			var key;
+			const firstProps = Object.getOwnPropertyNames(first).sort();
+			const firstPropsLength = firstProps.length;
+			const secondProps = Object.getOwnPropertyNames(second).sort();
+			let key;
 			if (firstPropsLength !== secondProps.length) {
 				return false;
 			}
@@ -336,26 +330,26 @@ class utls {
 	 * @returns {*}
 	 */
 	static vcopy(value) {
-		var __ref_cache = [];
+		const __ref_cache = [];
 
 		function _cp(value) {
-			var idx;
+			let idx;
 			if (typeof value === 'object') {
 				if (~(idx = __ref_cache.indexOf(value))) {
 					return __ref_cache[idx];
 				}
 				__ref_cache.push(value);
 			}
-			var copy;
+			let copy;
 			if (typeof value === 'object') {
-				var type = utls.getType(value);
+				const type = utls.getType(value);
 				if (type === 'Array') {
 					copy = value.map((val) => {
 						return _cp(val);
 					});
 				} else if (type === 'Object') {
 					copy = {};
-					for (var k in value) {
+					for (const k in value) {
 						copy[k] = _cp(value[k]);
 					}
 				} else if (typeof __vcopy_handlers[type] === 'object' && __vcopy_handlers[type] !== null) {
@@ -378,7 +372,7 @@ class utls {
 	 * @returns {*}
 	 */
 	static isCircular(value) {
-		var __ref = [];
+		const __ref = [];
 
 		function check(value) {
 			if (typeof value === 'object' && value !== null) {
@@ -386,7 +380,7 @@ class utls {
 					return true;
 				}
 				__ref.push(value);
-				for (var k in value) {
+				for (const k in value) {
 					if (check(value[k])) {
 						return true;
 					}
@@ -407,13 +401,13 @@ class utls {
 	 * @returns {*}
 	 */
 	static map(value, callback, key, origin) {
-		var __ref_cache = [];
+		const __ref_cache = [];
 
 		function map(value, callback, key, origin) {
-			var idx;
-			var type = utls.getType(value);
+			let idx;
+			const type = utls.getType(value);
 			if (type == 'Array') {
-				var arr = [];
+				const arr = [];
 				value.map((val, key, origin) => {
 					if (typeof val === 'object' && ~(idx = __ref_cache.indexOf(val))) {
 						arr.push(val);
@@ -429,8 +423,8 @@ class utls {
 				});
 				return arr;
 			} else if (type == 'Object') {
-				var obj = {};
-				for (var k in value) {
+				const obj = {};
+				for (const k in value) {
 					if (typeof value[k] === 'object' && ~(idx = __ref_cache.indexOf(value[k]))) {
 						obj[k] = value[k];
 					} else {
@@ -460,13 +454,13 @@ class utls {
 	 * @returns {*}
 	 */
 	static filter(value, callback, key, origin) {
-		var __ref_cache = [];
+		const __ref_cache = [];
 
 		function filter(value, callback, key, origin) {
-			var type = utls.getType(value);
-			var idx;
+			const type = utls.getType(value);
+			let idx;
 			if (type == 'Array') {
-				var arr = [];
+				const arr = [];
 				value.forEach((val, key, origin) => {
 					if (typeof val === 'object' && ~(idx = __ref_cache.indexOf(val))) {
 						return;
@@ -483,8 +477,8 @@ class utls {
 				});
 				return arr;
 			} else if (type == 'Object') {
-				var obj = {};
-				for (var k in value) {
+				const obj = {};
+				for (const k in value) {
 					if (typeof value[k] === 'object' && ~(idx = __ref_cache.indexOf(value[k]))) {
 						return;
 					}
