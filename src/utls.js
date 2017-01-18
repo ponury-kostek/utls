@@ -203,7 +203,7 @@ class utls {
 	static traverse(value, match, callback, key, origin) {
 		if (match(value)) {
 			return callback(value, key, origin);
-		} else if (utls.getType(value) == 'Array') {
+		} else if (utls.getType(value) === 'Array') {
 			const arr = [];
 			value.map((val, key, origin) => {
 				const res = utls.traverse(val, match, callback, key, origin);
@@ -212,7 +212,7 @@ class utls {
 				}
 			});
 			return arr;
-		} else if (utls.getType(value) == 'Object') {
+		} else if (utls.getType(value) === 'Object') {
 			const obj = {};
 			for (const k in value) {
 				const res = utls.traverse(value[k], match, callback, k, value);
@@ -237,6 +237,36 @@ class utls {
 		const __cmp_cache = [];
 		let fidx, sidx, idx_cmp;
 
+		function compared(first, second) {
+			if (typeof first === 'object' && typeof second === 'object') {
+				if (~(fidx = __first_ref_cache.indexOf(first)) && ~(sidx = __second_ref_cache.indexOf(second))) {
+					idx_cmp = fidx + ',' + sidx;
+					if (~__cmp_cache.indexOf(idx_cmp)) {
+						return true;
+					}
+					__cmp_cache.push(idx_cmp);
+				}
+				__first_ref_cache.push(first);
+				__second_ref_cache.push(second);
+			}
+			return false;
+		}
+
+		function differs(first, second) {
+			if (first instanceof Array && second instanceof Array) {
+				if (!arrays(first, second)) {
+					return true;
+				}
+			} else if (first instanceof Object && second instanceof Object) {
+				if (!objects(first, second)) {
+					return true;
+				}
+			} else if (first !== second && first === first) {
+				return true;
+			}
+			return false;
+		}
+
 		function arrays(first, second) {
 			if (first === second) {
 				return true;
@@ -246,26 +276,10 @@ class utls {
 			}
 			const length = first.length;
 			for (var i = 0; i < length; i++) {
-				if (typeof first[i] === 'object' && typeof second[i] === 'object') {
-					if (~(fidx = __first_ref_cache.indexOf(first[i])) && ~(sidx = __second_ref_cache.indexOf(second[i]))) {
-						idx_cmp = fidx + ',' + sidx;
-						if (~__cmp_cache.indexOf(idx_cmp)) {
-							continue;
-						}
-						__cmp_cache.push(idx_cmp);
-					}
-					__first_ref_cache.push(first[i]);
-					__second_ref_cache.push(second[i]);
+				if (compared(first[i], second[i])) {
+					continue;
 				}
-				if (first[i] instanceof Array && second[i] instanceof Array) {
-					if (!arrays(first[i], second[i])) {
-						return false;
-					}
-				} else if (first[i] instanceof Object && second[i] instanceof Object) {
-					if (!objects(first[i], second[i])) {
-						return false;
-					}
-				} else if (first[i] !== second[i]) {
+				if (differs(first[i], second[i]) === true) {
 					return false;
 				}
 			}
@@ -288,26 +302,10 @@ class utls {
 			}
 			for (var i = 0; i < firstPropsLength; i++) {
 				key = firstProps[i];
-				if (typeof first[key] === 'object' && typeof second[key] === 'object') {
-					if (~(fidx = __first_ref_cache.indexOf(first[key])) && ~(sidx = __second_ref_cache.indexOf(second[key]))) {
-						idx_cmp = fidx + ',' + sidx;
-						if (~__cmp_cache.indexOf(idx_cmp)) {
-							continue;
-						}
-						__cmp_cache.push(idx_cmp);
-					}
-					__first_ref_cache.push(first[key]);
-					__second_ref_cache.push(second[key]);
+				if (compared(first[key], second[key])) {
+					continue;
 				}
-				if (first[key] instanceof Array && second[key] instanceof Array) {
-					if (!arrays(first[key], second[key])) {
-						return false;
-					}
-				} else if (first[key] instanceof Object && second[key] instanceof Object) {
-					if (!objects(first[key], second[key])) {
-						return false;
-					}
-				} else if (first[key] !== second[key]) {
+				if (differs(first[key], second[key]) === true) {
 					return false;
 				}
 			}
@@ -406,7 +404,7 @@ class utls {
 		function map(value, callback, key, origin) {
 			let idx;
 			const type = utls.getType(value);
-			if (type == 'Array') {
+			if (type === 'Array') {
 				const arr = [];
 				value.map((val, key, origin) => {
 					if (typeof val === 'object' && ~(idx = __ref_cache.indexOf(val))) {
@@ -422,7 +420,7 @@ class utls {
 					}
 				});
 				return arr;
-			} else if (type == 'Object') {
+			} else if (type === 'Object') {
 				const obj = {};
 				for (const k in value) {
 					if (typeof value[k] === 'object' && ~(idx = __ref_cache.indexOf(value[k]))) {
@@ -459,7 +457,7 @@ class utls {
 		function filter(value, callback, key, origin) {
 			const type = utls.getType(value);
 			let idx;
-			if (type == 'Array') {
+			if (type === 'Array') {
 				const arr = [];
 				value.forEach((val, key, origin) => {
 					if (typeof val === 'object' && ~(idx = __ref_cache.indexOf(val))) {
@@ -476,7 +474,7 @@ class utls {
 					}
 				});
 				return arr;
-			} else if (type == 'Object') {
+			} else if (type === 'Object') {
 				const obj = {};
 				for (const k in value) {
 					if (typeof value[k] === 'object' && ~(idx = __ref_cache.indexOf(value[k]))) {
