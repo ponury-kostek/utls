@@ -26,6 +26,9 @@ const utls = {
 		if (value === true || value === false) {
 			return 'Boolean';
 		}
+		if (value !== value) {
+			return 'NaN';
+		}
 		function _function(value) {
 			return value.name;
 		}
@@ -45,6 +48,9 @@ const utls = {
 				return _function(value) || 'Function';
 				break;
 			case 'object':
+				if (value.constructor === undefined) {
+					return 'Object';
+				}
 				return _function(value.constructor) || 'Object';
 				break;
 			default:

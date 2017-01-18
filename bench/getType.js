@@ -35,10 +35,15 @@ const values = [
 	Test,
 	new Test(),
 	new Date(),
-	/a/
+	/a/,
+	Symbol()
 ];
+function nop() {
+}
 const length = values.length;
-suite.add('utls.getType', function () {
+suite.add('nop', function () {
+	nop();
+}).add('utls.getType', function () {
 	for (var i = 0; i < length; i++) {
 		utls.getType(values[i]);
 	}
