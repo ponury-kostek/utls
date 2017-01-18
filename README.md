@@ -3,6 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/ponury-kostek/utls/badge.svg?branch=master&service=github)](https://coveralls.io/github/ponury-kostek/utls?branch=master)
 [![npm version](https://badge.fury.io/js/utls.svg)](https://badge.fury.io/js/utls)
 [![npm](https://img.shields.io/npm/dt/utls.svg)](https://www.npmjs.com/package/utls)
+[![Code Climate](https://codeclimate.com/github/ponury-kostek/utls/badges/gpa.svg)](https://codeclimate.com/github/ponury-kostek/utls)
 ### getType(value)
 Returns type of given value or name of function/object.
 ### microtime()
