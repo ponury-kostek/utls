@@ -7,6 +7,25 @@
  * @private
  */
 const __vcopy_handlers = {};
+const _path = require('path');
+const _fs = require('fs');
+function _is_string(value) {
+	return typeof value === 'string' || value instanceof String;
+}
+/**
+ *
+ * @param {String} string
+ * @param {Boolean} [up]
+ * @returns {*}
+ * @private
+ */
+function _cc_first(string, up) {
+	if (!_is_string(string) || string.length === 0) {
+		return '';
+	}
+	const first = string.charAt(0);
+	return (up ? first.toUpperCase() : first.toLowerCase()) + string.slice(1);
+}
 /**
  * @author Michał Żaloudik <michal.zaloudik@redcart.pl>
  */
@@ -75,7 +94,7 @@ class utls {
 	 * @return {String}
 	 */
 	static ucFirst(string) {
-		return (string || '').charAt(0).toUpperCase() + string.slice(1);
+		return _cc_first(string, true);
 	}
 
 	/**
@@ -84,7 +103,7 @@ class utls {
 	 * @return {String}
 	 */
 	static lcFirst(string) {
-		return (string || '').charAt(0).toLowerCase() + string.slice(1);
+		return _cc_first(string, false);
 	}
 
 	/**
@@ -93,7 +112,10 @@ class utls {
 	 * @returns {String}
 	 */
 	static camelCase(string) {
-		return (string || '').toLowerCase().replace(/(-|\s|_)./g, function (m) {
+		if (!_is_string(string)) {
+			return '';
+		}
+		return string.toLowerCase().replace(/(-|\s|_)./g, function (m) {
 			return m.toUpperCase().replace(/-|\s|_/, '');
 		});
 	}
@@ -113,12 +135,11 @@ class utls {
 	 * @return {Boolean}
 	 */
 	static fileExists(path) {
-		if (!require('path').isAbsolute(path)) {
+		if (!_path.isAbsolute(path)) {
 			throw new Error("Path must be absolute!");
 		}
 		try {
-			const fs = require('fs');
-			fs.accessSync(fs.realpathSync(path), fs.F_OK);
+			_fs.accessSync(_fs.realpathSync(path), _fs.F_OK);
 		} catch (e) {
 			return false;
 		}
@@ -135,21 +156,20 @@ class utls {
 		options = options || {};
 		options.mode = options.mode || 0o775;
 		options.parents = options.parents || true;
-		const xpath = require('path');
-		const fs = require('fs');
-		const parts = path.split(xpath.sep);
+		const parts = path.split(_path.sep);
 		if (options.parents) {
 			for (var i = 1; i < parts.length; i++) {
-				path = parts.slice(0, i).join(xpath.sep) + xpath.sep;
+				path = parts.slice(0, i).join(_path.sep) + _path.sep;
 				if (!utls.fileExists(path)) {
-					fs.mkdirSync(path, options.mode);
+					_fs.mkdirSync(path, options.mode);
 				}
 			}
-		} else {
-			path = parts.splice(0, parts.length - 1).join(xpath.sep) + xpath.sep;
-			if (utls.fileExists(path)) {
-			}
 		}
+		/* else {
+					path = parts.splice(0, parts.length - 1).join(xpath.sep) + xpath.sep;
+					if (utls.fileExists(path)) {
+					}
+				}*/
 		return true;
 	}
 
