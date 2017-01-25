@@ -10,52 +10,52 @@ const __vcopy_handlers = {};
 /**
  * @author Michał Żaloudik <michal.zaloudik@redcart.pl>
  */
+function _function_name(value) {
+	return value.name;
+}
+function is_nan(value) {
+	return value !== value;
+}
+
+function number_type(value) {
+	if (value % 1 !== 0) {
+		return 'Float';
+	}
+	return 'Integer';
+}
 const utls = {
 	/**
 	 * Returns type of given value or name of function/object.
 	 * @param {*} value
 	 * @return {String}
 	 */
-	getType : function (value) {
+	getType : function getType(value) {
+		if (value === true || value === false) {
+			return 'Boolean';
+		}
 		if (value === null) {
 			return 'Null';
 		}
 		if (value === undefined) {
 			return 'Undefined';
 		}
-		if (value === true || value === false) {
-			return 'Boolean';
-		}
-		if (value !== value) {
+		if (is_nan(value)) {
 			return 'NaN';
 		}
-		function _function(value) {
-			return value.name;
-		}
-
 		switch (typeof value) {
 			case 'number':
-				if (value % 1 !== 0) {
-					return 'Float';
-				} else {
-					return 'Integer';
-				}
-				break;
+				return number_type(value);
 			case 'string':
 				return 'String';
-				break;
 			case 'function':
-				return _function(value) || 'Function';
-				break;
+				return _function_name(value) || 'Function';
 			case 'object':
 				if (value.constructor === undefined) {
 					return 'Object';
 				}
-				return _function(value.constructor) || 'Object';
-				break;
+				return _function_name(value.constructor) || 'Object';
 			default:
 				return 'unknown';
-				break;
 		}
 	},
 	/**
@@ -63,7 +63,8 @@ const utls = {
 	 * @return {Number}
 	 */
 	microtime : function microtime() {
-		return (new Date()).getTime() / 1000;
+		const date = new Date();
+		return date.getTime() / 1000;
 	},
 	/**
 	 * Returns a string with the first character of string capitalized, if that character is alphabetic.
@@ -153,11 +154,11 @@ const utls = {
 		destination = destination || {};
 		source = source || {};
 		for (var property in source) {
-			if (source.hasOwnProperty(property) && source[property] && source[property].constructor && source[property].constructor === Object) {
-				if (!(destination[property] && destination[property].constructor && destination[property].constructor === Object)) {
+			if (source.hasOwnProperty(property) && typeof source[property] === 'object' && source[property] !== null) {
+				if (typeof destination[property] !== 'object' || destination[property] === null) {
 					destination[property] = {};
 				}
-				utls.extend(destination[property], source[property]);
+				extend(destination[property], source[property]);
 			} else {
 				destination[property] = source[property];
 			}
@@ -191,7 +192,7 @@ const utls = {
 	traverse : function traverse(value, match, callback, key, origin) {
 		if (match(value)) {
 			return callback(value, key, origin);
-		} else if (utls.getType(value) === 'Array') {
+		} else if (value instanceof Array) {
 			const arr = [];
 			value.map((val, key, origin) => {
 				const res = utls.traverse(val, match, callback, key, origin);
@@ -326,27 +327,25 @@ const utls = {
 				}
 				__ref_cache.push(value);
 			}
-			let copy;
 			if (typeof value === 'object') {
-				const type = utls.getType(value);
-				if (type === 'Array') {
-					copy = value.map((val) => {
+				if (value instanceof Array) {
+					return value.map((val) => {
 						return _cp(val);
 					});
-				} else if (type === 'Object') {
-					copy = {};
+				} else if (utls.getType(value) === 'Object') {
+					const copy = {};
 					for (var k in value) {
-						copy[k] = _cp(value[k]);
+						if (value.hasOwnProperty(k)) {
+							copy[k] = _cp(value[k]);
+						}
 					}
 				} else if (typeof __vcopy_handlers[type] === 'object' && __vcopy_handlers[type] !== null) {
 					return __vcopy_handlers[type].handler(__vcopy_handlers[type].cls, value);
 				} else {
-					copy = value;
+					return value;
 				}
-			} else {
-				copy = value;
 			}
-			return copy;
+			return value;
 		}
 
 		return _cp(value);
@@ -387,37 +386,40 @@ const utls = {
 	map : function map(value, callback, key, origin) {
 		const __ref_cache = [];
 
-		function map(value, callback, key, origin) {
+		function _map(value, callback, key, origin) {
 			let idx;
-			const type = utls.getType(value);
-			if (type === 'Array') {
+			if (value instanceof Array) {
 				const arr = [];
 				value.map((val, key, origin) => {
-					if (typeof val === 'object' && ~(idx = __ref_cache.indexOf(val))) {
-						arr.push(val);
+					const type = typeof val;
+					if (type === 'object' && ~(idx = __ref_cache.indexOf(val))) {
+						return '[Circular]';
 					} else {
-						if (typeof val === 'object') {
+						if (type === 'object') {
 							__ref_cache.push(val);
 						}
-						arr.push(map(val, callback, key, origin));
-						if (typeof val === 'object') {
+						arr.push(_map(val, callback, key, origin));
+						if (type === 'object') {
 							__ref_cache.pop();
 						}
 					}
 				});
 				return arr;
-			} else if (type === 'Object') {
+			} else if (utls.getType(value) === 'Object') {
 				const obj = {};
-				for (var k in value) {
-					if (typeof value[k] === 'object' && ~(idx = __ref_cache.indexOf(value[k]))) {
-						obj[k] = value[k];
-					} else {
-						if (typeof value[k] === 'object') {
-							__ref_cache.push(value[k]);
-						}
-						obj[k] = map(value[k], callback, k, value);
-						if (typeof value[k] === 'object') {
-							__ref_cache.pop();
+				for (const k in value) {
+					if (value.hasOwnProperty(k)) {
+						const type = typeof value[k];
+						if (type === 'object' && ~(idx = __ref_cache.indexOf(value[k]))) {
+							return '[Circular]';
+						} else {
+							if (type === 'object') {
+								__ref_cache.push(value[k]);
+							}
+							obj[k] = _map(value[k], callback, k, value);
+							if (type === 'object') {
+								__ref_cache.pop();
+							}
 						}
 					}
 				}
@@ -427,7 +429,7 @@ const utls = {
 			}
 		}
 
-		return map(value, callback, key, origin);
+		return _map(value, callback, key, origin);
 	},
 	/**
 	 * @param {*} value

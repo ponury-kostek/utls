@@ -38,12 +38,8 @@ const values = [
 	/a/,
 	Symbol()
 ];
-function nop() {
-}
 const length = values.length;
-suite.add('nop', function () {
-	nop();
-}).add('utls.getType', function () {
+suite.add('utls.getType', function () {
 	for (var i = 0; i < length; i++) {
 		utls.getType(values[i]);
 	}
@@ -54,6 +50,5 @@ suite.add('nop', function () {
 }).on('cycle', function (event) {
 	console.log(String(event.target));
 }).on('complete', function () {
-	console.log(1000 / this.filter('fastest')[0].hz);
 	console.log('Fastest is ' + this.filter('fastest').map('name'));
 }).run();
