@@ -59,13 +59,10 @@ class utls {
 		function _function(value) {
 			return value.name;
 		}
-
-		switch (typeof value) {
+		const type = typeof value;
+		switch (type) {
 			case 'number':
-				if (value % 1 !== 0) {
-					return 'Float';
-				}
-				return 'Integer';
+				return 'Number';
 			case 'string':
 				return 'String';
 			case 'function':
@@ -76,7 +73,7 @@ class utls {
 				}
 				return _function(value.constructor) || 'Object';
 			default:
-				return 'unknown';
+				return '';
 		}
 	}
 
